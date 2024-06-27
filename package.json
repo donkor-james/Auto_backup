@@ -1,0 +1,23 @@
+{
+  "name": "mini_project",
+  "productName": "Automated Backup Application",
+  "version": "1.0.0",
+  "description": "backup application for desktop",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/donkor-james/Auto_backup.git"
+  },
+  "author": "Donkor James",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/donkor-james/Auto_backup/issues"
+  },
+  "homepage": "https://github.com/donkor-james/Auto_backup#readme",
+  "dependencies": {
+    "electron": "^31.1.0"
+  }
+}
