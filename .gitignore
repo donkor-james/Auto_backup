@@ -1,1 +1,4 @@
 node_modules/
+backend/credentials.json
+backend/token.json
+token.json
