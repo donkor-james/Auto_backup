@@ -3,7 +3,7 @@
   "productName": "Automated Backup Application",
   "version": "1.0.0",
   "description": "backup application for desktop",
-  "main": "main.js",
+  "main": "./frontend/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/donkor-james/Auto_backup#readme",
   "dependencies": {
-    "electron": "^31.1.0"
+    "axios": "^1.7.2",
+    "electron": "^31.1.0",
+    "node-fetch": "^3.3.2"
   }
 }

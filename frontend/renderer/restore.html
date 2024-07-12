@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body class="settings_body">
+  <div class="settings_title">
+    <div class="title_wrapper">
+      <span class="span">
+        <img src="./download.png" alt="">
+        <div>AutoBackup</div>
+      </span>
+      <button class="settings_cls_btn" id="settings_cls_btn">&times;</button>
+    </div>
+  </div>
+
+  <section class="settings">
+    <div class="settings_wrapper">
+      <!-- left section -->
+      <div class="left_section">
+        <div class="left_wrapper">
+          <a href="settings.html"><div >Home</div></a>
+          <a href="backup.html"><div>Backup</div></a>
+          <a href="restore.html"><div class="current">Restore</div></a>
+          <a href=""><div class="">Logout</div></a>
+          </ul>
+        </div>
+        <!-- <ul>
+          <li><a href="">Home</a></li>
+          <li><a href="">Settings</a></li>
+          <li><a href="">Restore</a></li>
+          <li><a href="">Log out</a></li>
+        </ul> -->
+      </div>
+      
+      <!-- right -->
+    <form action="">
+      <div class="settings_right">
+        <div class="right_wrapper"> 
+          <div class="sub_sections">
+            <div class="heading ">
+              Restored Data Info
+            </div>
+          
+            <div class="heading_details">
+              <div class="restore_info">
+                <span>Last Restoration:</span>
+                <span class="restore_span"> No Operation Yet</span>
+              </div>
+              <div class="restore_info">
+                <span>Data Size Restored:</span>
+                <span class="restore_span"> None</span>
+              </div>
+            </div>
+          </div>
+          <div class="sub_sections">
+            <div class="heading">
+              Path To Restore Data 
+            </div>
+            <div class="heading_details">
+              <div class="restore_path">
+                <input type="radio" id="radio1" value="Default Path" name="path">
+                <label for="radio1">Default Paths</label>
+              </div>
+              <div class="restore_path">
+                <input class="set_path" type="radio" id="radio" value="Default Path" name="path">
+                <label class=".label_restore" for="radio">Set Own Path</label>
+                <input class="hidden_input" type="text">
+              </div>
+              </div>
+
+          </div>
+
+          <div class="sub_sections">
+            <input class="restore_btn" type="submit" value="Restore Data">
+          </div>
+        </div>
+      </div>
+    </form>
+
+    </div>
+
+    </section>
+
+    <footer class="settings_footer">
+      <div>
+        <span><img src="./download.png" alt=""></span>
+        AutoBackup
+      </div>
+    </footer>
+</body>
+<script src="">
+  console.log('hello')
+  fetch('http://127.0.0.1:5000/api/files')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data, "fsvh")
+  })
+  //   const { remote } = require("electron");
+  //   document.getElementById("close_btn").addEventListener("click", () => {
+  //     console.log("close")
+  //     let win = remote.BrowserWindow.getFocusedWindow();
+  //     win.close();
+  // });
+</script>
+</html>

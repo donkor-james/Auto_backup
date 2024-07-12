@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body>
+  <div class="titlebar">
+    <div class="wrapper">
+      <span class="span">
+        <img src="./download.png" alt="">
+        <div>AutoBackup</div>
+      </span>
+      <button class="close_btn" id="close_btn">&times;</button>
+    </div>
+  </div>
+
+  <section class="main">
+    <div class="main_wrapper">
+      <h1>Create An Accounts</h1>
+      <form action="/signup" method="POST" class="form">
+        <div class="input">
+          <input type="email" id="email" name="email" placeholder="Enter Email..." required>
+        </div>
+        <div class="input">
+          <input type="password" id="passwd" name="password" placeholder="Password" required>
+        </div>
+      
+        <button class="btn" type="submit"><a href="./settings.html">Log In</a></button>
+      </form>
+    </div>
+    </section>
+
+    <footer class="footer">
+      <div>
+        <span><img src="./download.png" alt=""></span>
+        AutoBackup
+      </div>
+    </footer>
+</body>
+<script src="script.js">
+  //   const { remote } = require("electron");
+  //   document.getElementById("close_btn").addEventListener("click", () => {
+  //     console.log("close")
+  //     let win = remote.BrowserWindow.getFocusedWindow();
+  //     win.close();
+  // });
+</script>
+</html>

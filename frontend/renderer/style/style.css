@@ -1,0 +1,378 @@
+body{
+    background: linear-gradient(to bottom, rgb(114, 114, 152), rgb(86, 86, 116), rgb(19, 19, 36));
+    font-family: sans-serif;
+}
+body::-webkit-scrollbar{
+    display: none;
+}
+
+.titlebar, .settings_title{
+    background-color: rgb(251, 251, 251);
+    padding: 0px 0px;
+    width: 100%;
+    position: fixed;
+    left: 0px;
+    top: 0px;
+}
+
+.wrapper, .title_wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0px 12px;
+}
+.close_btn, .settings_cls_btn{
+    background-color: transparent;
+    border: none;
+    font-size: 28px;
+    color: rgb(125, 123, 123);
+}
+.footer, .settings_footer{
+    background-color: white;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    border: 1px solid;
+    padding:12px 7px;
+    width: 99%;
+    text-align: center;
+    color: rgb(92, 92, 123);
+}
+
+span img{
+    width: 22px;
+    /* font-size: 18px; */
+}
+.span{
+    display: flex;
+    gap: 6px;
+}
+
+.footer div{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.main{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    width: 80%;
+    height: 75vh;
+    border: 1px solid;
+    padding: 20px;
+    border: none;
+    /* box-shadow: 2px 2px 6px rgb(178, 176, 176); */
+}
+.main_wrapper{
+    margin-left: auto;
+    margin-right: auto;
+    /* margin-top: 30px; */
+    width: 88%;
+    height: 66vh;
+    border: 1px solid white;
+    padding: 12px 20px 18px 20px;
+    background-color: white;
+    /* border: none; */
+    /* box-shadow: 0px 0px 6px rgb(178, 176, 176); */
+}
+
+.main h1{
+    /* text-align: center; */
+    font-size: 30px;
+    margin: 30px 24px;
+    color: rgb(11, 11, 72);
+}
+
+.form{
+    position: relative;
+    /* display: flex;
+    flex-direction: column;
+    align-items: center; */
+    /* border: 1px solid; */
+}
+
+.form .input input{
+    outline: none;
+    border: none;
+    border-bottom: 1.8px solid rgb(178, 176, 176);
+    padding: 10px 20px 10px 3px;
+    width: 285px;
+    margin: 0px 0px 14px 28px;
+}
+
+.form input::placeholder{
+    font-size: 15px;
+}
+
+.btn{
+    padding: 6px 12px;
+    position: absolute;
+    right: 20px;
+    margin-top: 5px;
+    background-color: white;
+    color: blue;
+    border: none;
+    font-size: 17px;
+    text-decoration: underline;
+    cursor: pointer;
+    /* border: 1px solid red; */
+    /* top: 30px; */
+}
+
+.login{
+    margin-top: 70px;
+    margin-left: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.row{
+    /* margin-top: 40px; */
+    color: white;
+    width: 62vw;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#row_head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 14px 0px 6px;
+    height: 7.4vh;
+    background-color: rgb(99, 232, 119);
+    border:1px solid;
+    /* margin-bottom: 3px; */
+}
+
+#qn, #qn_2, #qn_3{
+    padding: 0px 4px;
+    color: black;
+    /* border: 1px solid; */
+}
+
+#down_arr, #down_arr_2, #down_arr_3{
+    font-size: 24px;
+    margin-bottom: 5px;
+    font-weight: 600;
+    cursor: pointer;    
+    transform: rotate(180deg);
+}
+#up_arr, #up_arr_2, #up_arr_3{
+    font-size: 24px;
+    margin-top: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    display: none;
+}
+
+/* Settings page */
+.settings_body{
+    background: rgb(244, 242, 242);
+    color:rgb(48, 48, 59);
+}
+
+.settings{
+    padding-bottom: 10px;
+}
+
+.settings_title{
+    display: flex;
+    justify-content: center;
+    background-color: rgb(244, 242, 242);
+    color: rgb(69, 69, 90);
+    padding:  12px 0px;
+    border: 0.5px solid rgba(142, 142, 159, 0.429);
+    z-index: 1;
+}
+
+.settings_cls_btn{
+    color: rgb(91, 91, 117);
+}
+
+.settings_footer{
+    background: rgb(244, 242, 242);
+    border: none;
+}
+
+.title_wrapper{
+    width: 92%;
+}
+
+.settings_wrapper{
+    display: flex;
+    gap: 18px;
+    max-width: 94%;
+    /* border: 1px solid; */
+    margin-top: 80px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.left_section{
+    position:sticky;
+    top: 80px;
+    display: flex;
+    align-self: flex-start;
+    max-width: 180px;
+    padding: 25px 24px 20px 10px;
+    /* margin-right: auto; */
+
+}
+
+
+.left_wrapper a{
+    line-height: 35px;
+    font-size: 17px;
+    /* height: 35px; */
+    /* padding: 10px 20px; */
+}
+
+.left_wrapper a{
+    text-decoration: none;
+    color:rgb(48, 48, 59);
+    /* padding: 100%; */
+    color: white;
+}
+
+
+.left_wrapper div:hover{
+    background-color: rgb(102, 39, 238);
+    color: white;
+    /* border: 1px solid white; */
+}
+
+.left_wrapper div{
+    color: rgb(48, 48, 59);
+    width: 145px;
+    padding: 4px 18px;
+    text-align: center;
+    outline: none;
+}
+
+.left_wrapper .current{
+    background-color: rgb(102, 39, 238);
+    border: 1px solid white;
+    color: white;
+}
+
+
+.settings_right{
+    width: 100vw;
+}
+
+.settings_wrapper .right_wrapper{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding: 10px;
+}
+
+.sub_sections{
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    /* border: 1px solid; */
+}
+
+.heading{
+    font-size: 17.8px;
+    font-weight: bold;
+}
+
+
+
+.select{
+    width: 135px;
+    padding: 6px 12px;
+}
+
+
+
+.heading_details input{
+    outline: none;
+    padding: 6px 15px 5px 4px;
+    font-size: 15px;
+}
+
+.heading_details .folders{
+    padding: 8px 15px 8px 2px;
+    border-bottom: 1px solid;
+}
+
+.heading_details .folders:nth-child(1){
+    border-bottom: none;
+    margin-bottom: 5px;
+}
+.heading_details .folders:nth-child(2){
+    border-top: 1px solid;
+}
+
+
+.folders{
+    display: flex;
+    justify-content: space-between;
+    width: 98%;
+}
+
+.folders h4{
+    margin: 0px 4px;
+}
+
+.total_backup{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.restore_path{
+    margin-bottom: 8px;
+}
+
+.restore_path div{
+    margin-bottom: 6px;
+}
+
+.hidden_input{
+    display: none;
+    margin-top: 7px;
+}
+
+.set_path:checked ~ .hidden_input{
+    display: flex;
+}
+
+.restore_info {
+    margin-bottom: 6px;
+}
+
+.restore_info span{
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.restore_span{
+    color: rgb(177, 179, 205);
+}
+
+ .restore_btn{
+    width:136px;
+    text-align: center;
+    padding: 10px 24px;
+    font-size: 16px;
+    background-color: rgb(102, 39, 238);
+    border: 1px solid white;
+    border-radius: 3px;
+    color: white;
+    /* margin-right: 150px; */
+}
+
+ .restore_btn:hover{
+    background-color: rgb(70, 19, 180);
+}
+
+.whattodo{
+    color: red;
+}

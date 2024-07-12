@@ -1,4 +1,3 @@
 node_modules/
-backend/credentials.json
-backend/token.json
-token.json
+drive_credentials/credentials.json
+drive_credentials/token.json
