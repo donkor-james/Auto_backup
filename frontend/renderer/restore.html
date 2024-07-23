@@ -62,20 +62,20 @@
             </div>
             <div class="heading_details">
               <div class="restore_path">
-                <input type="radio" id="radio1" value="Default Path" name="path">
-                <label for="radio1">Default Paths</label>
+                <input type="radio" id="radio" value="Default_Path" name="path">
+                <label for="radio">Default Paths</label>
               </div>
               <div class="restore_path">
-                <input class="set_path" type="radio" id="radio" value="Default Path" name="path">
-                <label class=".label_restore" for="radio">Set Own Path</label>
-                <input class="hidden_input" type="text">
+                <input class="set_path" type="radio" id="radio1" value="Own Path" name="path">
+                <label class=".label_restore" for="radio1">Set Own Path</label>
+                <input class="hidden_input" id="own_path_value" type="text" placeholder="Enter path" required>
               </div>
               </div>
 
           </div>
 
           <div class="sub_sections">
-            <input class="restore_btn" type="submit" value="Restore Data">
+            <button type="button" class="restore_btn" id="restore_btn" onclick="restoreData()">Restore Data</button>
           </div>
         </div>
       </div>
@@ -92,18 +92,7 @@
       </div>
     </footer>
 </body>
-<script src="">
-  console.log('hello')
-  fetch('http://127.0.0.1:5000/api/files')
-  .then(response => response.json())
-  .then(data => {
-    console.log(data, "fsvh")
-  })
-  //   const { remote } = require("electron");
-  //   document.getElementById("close_btn").addEventListener("click", () => {
-  //     console.log("close")
-  //     let win = remote.BrowserWindow.getFocusedWindow();
-  //     win.close();
-  // });
+<script src="./style/script.js">
+
 </script>
 </html>

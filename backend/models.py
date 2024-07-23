@@ -1,12 +1,17 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from sqlalchemy import DateTime
+from datetime import datetime
 
 db = SQLAlchemy()
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    backup_schedule = db.Column(db.String)
+    backedup_at = db.Column(DateTime, default=None)
+    total_data = db.Column(db.String)
+    restore_path = db.column(db.String)
 
 
 class File(db.Model):
@@ -28,5 +33,10 @@ class Folder(db.Model):
     def __repr__(self):
         return f"folder('{self.name}', '{self.folder_size}!')"
 
-# with app
-# db.create_all()
+
+#     print("yess")
+# if "User" in db.metadata.tables:
+#     print("yess!")
+#     db.metadata.tables["User"].drop(db.engine)
+# with app.a:
+#     db.create_all()

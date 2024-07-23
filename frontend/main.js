@@ -1,12 +1,14 @@
 const path = require("path");
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, ipcRenderer } = require("electron");
 const { net } = require("electron");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...a));
 const axios = require("axios");
+const http = require("http");
+const fs = require("fs");
+const { error } = require("console");
 const isMac = process.platform === "darwin";
 const isDev = false;
-
 let mainWindow;
 
 function createWindow() {
@@ -15,16 +17,14 @@ function createWindow() {
     width: isDev ? 800 : 780,
     height: 550,
     frame: false,
-    autoHideMenuBar: true, // Set to true to hide the menu bar
+    autoHideMenuBar: true,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
 
-  // Use loadFile to load the HTML file
   mainWindow.loadFile(path.join(__dirname, "./renderer/settings.html"));
-  // console.log(mainWindow);
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
@@ -100,6 +100,78 @@ ipcMain.handle("getFolder", () => {
   });
 
   request.end();
+});
+
+ipcMain.on("postDataForRequest", (event, postData) => {
+  console.log(postData);
+  const postDataString = JSON.stringify(postData);
+  const options = {
+    hostname: "localhost",
+    port: 5000,
+    path: "/api/user/1",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Content-Length": Buffer.byteLength(postDataString),
+    },
+  };
+
+  const req = http.request(options, (res) => {
+    let data = "";
+
+    res.on("data", (chunk) => {
+      data += chunk;
+      console.log(chunk);
+    });
+
+    res.on("end", () => {
+      if (fs.existsSync("userData.json")) {
+        fs.readFile("userData.json", "utf8", (err, userData) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          const existData = JSON.parse(userData);
+
+          existData.id = JSON.parse(data).user.id;
+          existData.email = JSON.parse(data).user.email;
+
+          const updated_data = existData;
+
+          fs.writeFile("userData.json", JSON.stringify(updated_data), (err) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+            console.log("Data updated successfully");
+          });
+        });
+      } else {
+        console.log(data);
+        console.log(typeof data);
+        fs.writeFile("userData.json", data, (err) => {
+          console.log(err);
+        });
+      }
+      console.log(JSON.parse(data).user.email + "yhg");
+      mainWindow.webContents.send("gotUser", data);
+    });
+    // const user = JSON.parse(data);
+    console.log("hsggdjh");
+    // mainWindow.webContents.se;
+  });
+
+  req.on("error", (error) => {
+    console.error(error);
+  });
+
+  req.write(postDataString);
+  req.end();
+});
+
+ipcMain.on("sendData", (event, data) => {
+  console.log("fuck youu");
+  // ipcRenderer.send("sendData2", data);
 });
 
 // ipcMain.handle("apiRequestAxios", async () => {

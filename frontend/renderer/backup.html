@@ -45,11 +45,11 @@
                 Schedule Backup
               </div>
               <div class="heading_details">
-                <select class="select" name="" id="">
-                  <option value="">On Arrival</option>
-                  <option value="">Daily</option>
-                  <option value="">Weekly</option>
-                  <option value="">Monthly</option>
+                <select class="select" name="" id="select">
+                  <option value="On Arrival">On Arrival</option>
+                  <option value="Daily">Daily</option>
+                  <option value="Weekly">Weekly</option>
+                  <option value="Monthly">Monthly</option>
                 </select>
               </div>
             </div>
@@ -94,7 +94,7 @@
               <h3>Total Backup:</h3>
               <h4>218 MB</h4>
             </div>
-            <button class="restore_btn" id="restore_btn" onclick="doRequest()"> Save</button>
+            <button class="restore_btn" id="restore_btn" onclick="getFolder()">Save</button>
 
           </div>
 
@@ -111,20 +111,22 @@
     </footer> -->
 </body>
 <script defer src="./style/script.js">
-    // var whattodo = document.getElementById("whattodo");
+
+
+// var whattodo = document.getElementById("whattodo");
     // window.addEventListener("DOMContentLoaded", () => {
     //   const data = window.indexBridge.doRequestFetch();
     //   whattodo.innerText = data;
 
     // })
   //   data = JSON.parse(JSON.stringify(json));
-  // whattodo.innerText = data;
   // console.log(data);
   // doRequestAxios: async () => {
   //   var result = await ipcRenderer.invoke("doRequestAxios");
   //   var whattodo = document.getElementById("whattodo");
   //   data = JSON.parse(result);
   //   whattodo.innerText = data;
-  // }
+  // }// whattodo.innerText = data;
+  
 </script>
 </html>

@@ -35,17 +35,17 @@
             <div class="heading">
               Username
             </div>
-            <div class="heading_details">
+            <div class="heading_details" id="heading_details">
               Donkor James
             </div>
           </div>
 
           <div class="sub_sections">
-            <div class="heading">
+            <div class="heading" id="">
               Scheduled Backup
             </div>
-            <div class="heading_details">
-              <input type="text" value="Daily" readonly>
+            <div class="heading_details" class="div">
+              <input type="text" value="Daily" id="backup_path" class="schedule" readonly>
             </div>
           </div>
           <div class="sub_sections">
@@ -53,7 +53,7 @@
               Restore Path
             </div>
             <div class="heading_details">
-              <input type="text" value="Default Path" readonly>
+              <input type="text" value="Default Path" id="restore_path" readonly>
             </div>
 
           </div>
@@ -93,9 +93,6 @@
               </div>
             </div>
           </div>
-          <!-- <div>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, eos libero nobis saepe officia pariatur, enim perferendis delectus possimus recusandae obcaecati tempora itaque! Quasi repudiandae nam iste ut atque velit?
-          </div> -->
         </div>
       </div>
     </div>
@@ -121,7 +118,30 @@
       </div>
     </footer> -->
 </body>
-<script src="./style/script.js">
+<script src="./style/script_preload.js">
+  console.log("yhh")
+// const { contextBridge, ipcRenderer, ipcMain } = require("electron");
+// // const whatt = document.getElementById("schedule");
+
+// const { contextBridge, ipcRenderer } = require("electron");
+// ipcRenderer.on("gotUser", (event, json) => {
+//   const data = JSON.parse(json).user;
+//   const div = document.getElementById("div");
+//   ipcRenderer.send("data", data);
+//   console.log(Desktop);
+//   console.log(whatt);
+//   whattodo.value = data.email;
+//   console.log(JSON.stringify(data.email));
+// });
+
+// const selectElement = document.getElementById("select");
+// const save = document.getElementById("restore_btn");
+
+// // window.myFunction()
+// import { doRequest } from './style/script.js'
+// save.addEventListener("click", () => {
+//   doRequest()
+// })
 
 </script>
 </html>

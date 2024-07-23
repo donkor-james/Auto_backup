@@ -104,136 +104,39 @@ def delete_folder(folder_id):
     return jsonify({'result': True})
 
 
-# app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///example.db'
-# db = SQLAlchemy(app)
+backup_schedule = db.column(db.String)
+# restore_path
 
 
-# # class User(db.Model):
-# #     id = db.Column(db.Integer, primary_key=True)
-# #     username = db.Column(db.String(50), unique=True)
-# #     email = db.Column(db.String(50), unique=True)
+@api_routes.route('/user', methods=['GET'])
+def get_user():
+    user = User.query.get(1)
+    return jsonify({'user': {'id': user.id, 'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "total_data": user.total_data}})
+
+    # name = db.Column(db.String(100), nullable=False)
+    # backup_schedule = db.column(db.String)
+    # backedup_at = db.column(DateTime, default=None)
+    # total_data = db.Column(db.String)
 
 
-# # class UserSchema(Schema):
-# #     id = fields.Int(dump_only=True)
-# #     username = fields.Str(required=True)
-# #     email = fields.Email(required=True)
+@api_routes.route('/user/<int:id>', methods=['POST'])
+def update_user(id):
+    data = request.json
+    user = User.query.get(id)
+    user.name = data.get("name", user.name)
+    user.backup_schedule = data.get("name", user.backup_schedule)
+    user.backedup_at = data.get("name", user.backedup_at)
+    user.total_data = data.get("name", user.total_data)
+    db.session.commit()
+
+    return jsonify({'user': {'id': user.id, 'email': user.email}})
 
 
-# # @app.route('/users', methods=['GET'])
-# # def get_users():
-# #     users = User.query.all()
-# #     user_schema = UserSchema(many=True)
-# #     result = user_schema.dump(users)
-# #     return jsonify(result)
+@api_routes.route('/test', methods=['POST'])
+def update_test(id):
+    # data = request.json
+    # user = User.query.get(id)
+    # user.email = data.get("email", user.email)
+    # db.session.commit()
 
-
-# # @app.route('/users', methods=['POST'])
-# # def create_user():
-# #     user_schema = UserSchema()
-# #     new_user = user_schema.load(request.json)
-# #     db.session.add(new_user)
-# #     db.session.commit()
-# #     return user_schema.jsonify(new_user)
-
-
-# # if __name__ == '__main__':
-# #     db.create_all()
-# #     app.run(debug=True)
-
-# # class Folder(db.Model):
-# #     id = db.Column(db.Integer, primary_key=True)
-# #     name = db.Column()
-# #     size = db.Column()
-# # Start
-
-
-# from flask import Flask, request, jsonify
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_marshmallow import Marshmallow
-# import os
-
-# app = Flask(__name__)
-# # app = app.createp
-
-# basedir = os.path.abspath(os.path.dirname(__folder__))
-# basedir = basedir.replace('api', '')
-# print(basedir)
-# # Database
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + \
-#     os.path.join(basedir, 'db.sqlite')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# #
-# db = SQLAlchemy(app)
-# # with app.app_context():
-# #     db.create_all()
-# # Init ma
-# ma = Marshmallow(app)
-
-
-# class File(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(100))
-#     size = db.Column(db.Integer)
-#     file_type = db.Column(db.String(100))
-#     file_path = db.Column(db.String(100))
-
-#     def __init__(self, name, size, file_type, file_path):
-#         self.name = name
-#         self.size = size
-#         self.file_type = file_type
-#         self.file_path = file_path
-
-# # file schema
-
-
-# class folderchema(ma.Schema):
-#     class Meta:
-#         model = File
-#         fields = ('id', 'name', 'size', 'file_type', 'file_path')
-
-
-# # Init schema
-# file_schema = FileSchema(unknown='raise')
-# files_schema = FileSchema(many=True, unknown='raise')
-
-# # Create a file
-
-
-# @app.route('/file', methods=['POST'])
-# def add_file():
-#     name = request.json['name']
-#     size = request.json['size']
-#     file_type = request.json['file_type']
-#     file_path = request.json['file_path']
-
-#     new_file = File(name=name, size=size, file_type=file_type, file_path)
-
-#     db.session.add(new_file)
-#     db.session.commit()
-
-#     return file_schema.jsonify(new_file)
-
-# # Get all files
-
-
-# @app.route('/file', methods=['GET'])
-# def get_files():
-#     all_files = File.query.all()
-#     result = files_schema.dump(all_files)
-#     return jsonify(result.data)
-
-
-# # Run Server
-# if __name__ == '__main__':
-#     app.run(debug=True)
-
-# file = "file.txt"
-# if '.' in file:
-#     f_type = file.split('.')[-1]
-# else:
-#     f_type = None
-
-# print(f_type)
+    return jsonify({'test': {'id': "test_id", 'email': "test_email"}})
