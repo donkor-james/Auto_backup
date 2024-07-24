@@ -3,6 +3,7 @@ from flask import request, jsonify, Blueprint
 from models import db, File, Folder, User
 
 api_routes = Blueprint('api', __name__)
+user = {}
 
 
 @api_routes.route('/files', methods=['GET'])
@@ -110,8 +111,10 @@ backup_schedule = db.column(db.String)
 
 @api_routes.route('/user', methods=['GET'])
 def get_user():
-    user = User.query.get(1)
-    return jsonify({'user': {'id': user.id, 'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "total_data": user.total_data}})
+    users = User.query.all()
+    print(users)
+    return jsonify({'user': [{'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "user": user.restore_path, "total_data": user.total_data}for user in users]})
+    # return jsonify({'folders': [{'id': folder.id, 'name': folder.name, 'folder_size': folder.folder_size} for folder in folders]})
 
     # name = db.Column(db.String(100), nullable=False)
     # backup_schedule = db.column(db.String)
@@ -129,14 +132,29 @@ def update_user(id):
     user.total_data = data.get("name", user.total_data)
     db.session.commit()
 
+    return jsonify({'user': {'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "user": user.restore_path, "total_data": user.total_data}})
+
+
+@api_routes.route('/test/<init:id>', methods=['POST'])
+def update_test(id):
+    data = request.json
+    user.name = data.get("name", user.name)
+    user.backup_schedule = data.get("name", user.backup_schedule)
+    user.backedup_at = data.get("name", user.backedup_at)
+    user.total_data = data.get("name", user.total_data)
+    db.session.commit()
+
     return jsonify({'user': {'id': user.id, 'email': user.email}})
 
 
-@api_routes.route('/test', methods=['POST'])
-def update_test(id):
+@api_routes.route('/test', methods=['GET'])
+def update_test():
     # data = request.json
-    # user = User.query.get(id)
-    # user.email = data.get("email", user.email)
+    # user = {}
+    # user.name = data.get("name", user.name)
+    # user.backup_schedule = data.get("name", user.backup_schedule)
+    # user.backedup_at = data.get("name", user.backedup_at)
+    # user.total_data = data.get("name", user.total_data)
     # db.session.commit()
 
-    return jsonify({'test': {'id': "test_id", 'email': "test_email"}})
+    return jsonify({'user': {'id': user.id, 'email': user.email}})

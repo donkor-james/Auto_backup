@@ -1,5 +1,5 @@
 const { contextBridge, ipcRenderer } = require("electron");
-
+const fs = require("fs");
 let postData = {
   // name: "",
   backup_schedule: "",
@@ -8,13 +8,14 @@ let postData = {
 };
 
 let postRestore = {
-  email: "",
+  restore_path: "",
 };
 const selectElement = document.getElementById("select");
 const save = document.getElementById("restore_btn");
 const default_path = document.getElementById("radio");
 const own_path = document.getElementById("radio1");
 const own_path_value = document.getElementById("own_path_value");
+const path_empty = document.getElementById("path_empty");
 
 fetch("http://localhost:5000/api/folders")
   .then((response) => response.json())
@@ -28,36 +29,42 @@ fetch("http://localhost:5000/api/folders")
     const list2 = [Desktop, Documents, Downloads, Videos];
     // const data = JSON.parse(json).folders;
     console.log(data.folders);
-    for (let files of data.folders) {
-      for (let div of list) {
-        if (files.name === div) {
-          index = list.indexOf(div);
-          list2[index].innerHTML = files.folder_size;
-          console.log(files.folder_size);
+    if (data.folders != null) {
+      for (let files of data.folders) {
+        for (let div of list) {
+          if (files.name === div) {
+            index = list.indexOf(div);
+            list2[index].innerHTML = files.folder_size;
+            console.log(files.folder_size);
+          }
         }
+        console.log(files.folder_size);
+        // whattodo.innerHTML = files.id;
+        // console.log(JSON.stringify(files));
       }
-      console.log(files.folder_size);
-      // whattodo.innerHTML = files.id;
-      // console.log(JSON.stringify(files));
+    } else {
+      for (let elements in list2) {
+        elements.innerHTML = "0 KB";
+      }
     }
     // what.value = data.email
     console.log(JSON.stringify(data.folders) + "yhhhh");
   });
-fetch("http://localhost:5000/api/test")
-  .then((response) => response.json())
-  .then((data) => {
-    // what.value = data.email
-    console.log(JSON.stringify(data) + "yhhhh");
-  });
+// fetch("http://localhost:5000/api/test")
+//   .then((response) => response.json())
+//   .then((data) => {
+//     // what.value = data.email
+//     console.log(JSON.stringify(data) + "yhhhh");
+//   });
 
 function doRequest() {
   indexBridge.doRequest();
   console.log("it worked");
 }
 
-function getFolder() {
-  indexBridge.getFolder();
-}
+// function getFolder() {
+//   indexBridge.getFolder();
+// }
 
 function postDataForRequest() {
   const selectedOption = selectElement.options[selectElement.selectedIndex];
@@ -68,15 +75,20 @@ function postDataForRequest() {
 function restoreData() {
   if (default_path.checked) {
     console.log(default_path.value);
-    postRestore.email = default_path.value;
+    postRestore.restore_path = default_path.value;
     ipcRenderer.send("postDataForRequest", postRestore);
-  } else {
+  } else if (own_path.checked) {
     if (own_path_value.value === "") {
+      path_empty.innerHTML = "Field cannot be empty";
       console.log("empty");
     } else {
-      postRestore.email = own_path_value.value;
-      console.log("empty", own_path_value.value);
-      ipcRenderer.send("postDataForRequest", postRestore);
+      if (fs.existsSync(own_path_value.value)) {
+        postRestore.restore_path = own_path_value.value;
+        // console.log("empty", own_path_value.value);
+        ipcRenderer.send("postDataForRequest", postRestore);
+      } else {
+        path_empty.innerHTML = "Path does not exist";
+      }
     }
   }
 }

@@ -108,7 +108,7 @@ ipcMain.on("postDataForRequest", (event, postData) => {
   const options = {
     hostname: "localhost",
     port: 5000,
-    path: "/api/user/1",
+    path: "/api/test",
     method: "POST",
     headers: {
       "Content-Type": "application/json",

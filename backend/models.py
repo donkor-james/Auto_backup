@@ -11,7 +11,7 @@ class User(db.Model):
     backup_schedule = db.Column(db.String)
     backedup_at = db.Column(DateTime, default=None)
     total_data = db.Column(db.String)
-    restore_path = db.column(db.String)
+    restore_path = db.Column(db.String)
 
 
 class File(db.Model):
