@@ -15,6 +15,8 @@ user2 = {
     "total_data": ''
 }
 
+file_path = "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json"
+
 
 @api_routes.route('/files', methods=['GET'])
 def get_file():
@@ -201,7 +203,7 @@ def update_user():
 
 @api_routes.route('/getUser', methods=['GET'])
 def user():
-    with open("Auto_backup/userdata.json", "r") as file:
+    with open(file_path, "r") as file:
         login_credentials = json.load(file)
         print(login_credentials, "login_cred")
 
@@ -223,7 +225,8 @@ def login():
         login_credentials = {"isValid": True,
                              "isFirstTime": user.isFirstTime, "id": user.id}
         print(login_credentials, "line 225 and ", user)
-        with open("Auto_backup/userData.json", "w") as file:
+
+        with open(file_path, "w") as file:
             json.dump(login_credentials, file)
 
         return jsonify({"valid": login_credentials})

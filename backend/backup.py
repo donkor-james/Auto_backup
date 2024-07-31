@@ -282,8 +282,16 @@ def on_created(event):
             msg = copy_to_backup(
                 home_dir_temp, backup_path, event, home_dir_temp)
             break
+        with app.app_context():
+            with open("Auto_backup/userdata.json", "r") as file:
+                login_credentials = json.load(file)
+                print(login_credentials, "login_cred")
 
-    # upload_res(backup_path, creds, event.src_path)
+                user = User.query.get(login_credentials["id"])
+
+            backup_schdule = user.backup_schedule
+            if backup_schdule == "On Arrival":
+                upload_res(backup_path, creds, event.src_path)
 
 
 if __name__ == '__main__':
