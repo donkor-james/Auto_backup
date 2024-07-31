@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto backup</title>
+    <link rel="stylesheet" href="./style/style.css">
+</head>
+<body class="setup_body">
+  <div class="titlebar" id="titlebar_setup">
+    <div class="wrapper" id="wrapper_setup">
+      <span class="span">
+        <!-- <img src="./download.png" alt=""> -->
+        <div>AutoBackup</div>
+      </span>
+      <button class="close_btn" id="close_btn">&times;</button>
+    </div>
+  </div>
+
+  <section class="main_setup" id="">
+    <div class="setup_wrapper">
+      <div class="setup_border">
+        <div class="setup_title">
+          Application setup
+        </div>
+        <div class="setup_backup">
+          <h4>Backup settings</h4>
+          <div class="setup_backup_wrapper">
+            <div class="setup_backup_subtitle">configure how you want backup to be</div>
+              <form action="">
+                <div class="heading_details">
+                  <select class="select" name="" id="select">
+                    <option value="On Arrival">On Arrival</option>
+                    <option value="Daily">Daily</option>
+                    <option value="Weekly">Weekly</option>
+                    <option value="Monthly">Monthly</option>
+                  </select>
+                </div>
+              </form>
+          </div>
+        </div>
+        <!-- Restore  -->
+         <div class="setup_restore">
+          <h4 class="">
+            Retore settings 
+          </h4>
+
+          <div class="setup_restore_wrapper">
+            <p>Choose where your want backed up data to restore to on your device</p>
+            <div class="heading_details">
+              <div class="restore_path">
+                <input type="radio" id="radio" value="Default_Path" name="path">
+                <label for="radio">Default Location</label>
+              </div>
+              <div class="restore_path">
+                <input class="set_path" type="radio" id="radio1" value="Own Path" name="path">
+                <label class=".label_restore" for="radio1">Set Own Path</label>
+                <input class="hidden_input" id="own_path_value" type="text" placeholder="Enter path" required>
+                <div>
+                  <div class="path_empty" id="path_empty" style="color: red;"></div>
+                </div>
+              </div>
+            </div>
+           </div>
+          </div>
+          <button class="btn" id="setup_btn" onclick="submitSetup()">Continue</button>
+      </div>
+      
+    </div>
+    
+  </section>
+
+    <footer class="footer">
+      <div>
+        <span><img src="./download.png" alt=""></span>
+        AutoBackup
+      </div>
+    </footer>
+</body>
+<script src="./style/script_preload.js">
+  //   const { remote } = require("electron");
+  //   document.getElementById("close_btn").addEventListener("click", () => {
+  //     console.log("close")
+  //     let win = remote.BrowserWindow.getFocusedWindow();
+  //     win.close();
+  // });
+</script>
+</html>

@@ -8,10 +8,15 @@ db = SQLAlchemy()
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String, nullable=False)
+    isFirstTime = db.Column(db.Boolean, default=True)
     backup_schedule = db.Column(db.String)
     backedup_at = db.Column(DateTime, default=None)
     total_data = db.Column(db.String)
     restore_path = db.Column(db.String)
+
+    def __repr__(self):
+        return f"User('{self.name}', '{self.password}', {self.isFirstTime}, '{self.id}, {self.restore_path}, {self.backup_schedule}')"
 
 
 class File(db.Model):

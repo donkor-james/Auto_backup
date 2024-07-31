@@ -18,20 +18,32 @@
   </div>
 
   <section class="main">
-    <div class="main_wrapper">
-      <h1>Create An Accounts</h1>
-      <form action="/signup" method="POST" class="form">
-        <div class="input">
-          <input type="email" id="email" name="email" placeholder="Enter Email..." required>
-        </div>
-        <div class="input">
-          <input type="password" id="passwd" name="password" placeholder="Password" required>
-        </div>
+    <div class="main_wrapper2" id="main_wrapper2">
+        <h1>Log Into Account</h1>
+        <div id="login_warning"></div>
+        <form action="" method="post" class="form" id="form">
+          <div class="input">
+            <input type="text" id="login_username" name="username" placeholder="Username" required>
+          </div>
+          <div class="input">
+            <!-- <input type="email" id="email" name="email" placeholder="Enter Email..." required> -->
+          </div>
+          <div class="input">
+            <input type="password" id="login_password" name="password" placeholder="Password" required>
+          </div>
       
-        <button class="btn" type="submit"><a href="./settings.html">Log In</a></button>
-      </form>
-    </div>
-    </section>
+          <!-- <a href="#"><input class="btn" type="submit" onclick="sub()" value="sign up"></a> -->
+          <!-- <button  type="submit"><a href="">Sign Up</a></button> -->
+        </form>
+        <div class="btn" id="login_btn" onclick="login()">Login</div>
+        <div class="login">
+          <span>Don't have an account ?</span>
+          <div class="" id="register_link" onclick="signUp()">sign up</a>
+        </div>
+      </div>
+
+    <!-- Login  -->
+ 
 
     <footer class="footer">
       <div>
@@ -40,12 +52,7 @@
       </div>
     </footer>
 </body>
-<script src="script.js">
-  //   const { remote } = require("electron");
-  //   document.getElementById("close_btn").addEventListener("click", () => {
-  //     console.log("close")
-  //     let win = remote.BrowserWindow.getFocusedWindow();
-  //     win.close();
-  // });
+<script src="./style/script_preload.js">
+
 </script>
 </html>

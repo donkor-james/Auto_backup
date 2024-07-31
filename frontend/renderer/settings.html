@@ -24,7 +24,7 @@
           <a href="settings.html"><div class="current">Home</div></a>
           <a href="backup.html"><div class="">Backup</div></a>
           <a href="restore.html"><div class="">Restore</div></a>
-          <a href=""><div class="">Logout</div></a>
+          <a href="" onclick="loginLink()"><div class="" onclick="loginLink()">Logout</div></a>
         </div>
       </div>
       
@@ -36,7 +36,6 @@
               Username
             </div>
             <div class="heading_details" id="heading_details">
-              Donkor James
             </div>
           </div>
 
@@ -45,7 +44,7 @@
               Scheduled Backup
             </div>
             <div class="heading_details" class="div">
-              <input type="text" value="Daily" id="backup_path" class="schedule" readonly>
+              <input type="text" value="" id="backup_path" class="schedule" readonly>
             </div>
           </div>
           <div class="sub_sections">
@@ -53,7 +52,7 @@
               Restore Path
             </div>
             <div class="heading_details">
-              <input type="text" value="Default Path" id="restore_path" readonly>
+              <input type="text" value="" id="restore_path" readonly>
             </div>
 
           </div>
@@ -69,27 +68,27 @@
               </div>
               <div class="folders" >
                 <div>Desktop</div> 
-                <div id="Desktop">50 MB</div>
+                <div id="Desktop"></div>
               </div>
               <div class="folders" >
                 <div>Documents</div> 
-                <div id="Documents">68 MB</div>
+                <div id="Documents"></div>
               </div>
               <div class="folders" >
                 <div>Downloads</div> 
-                <div id="Downloads">52 MB</div>
+                <div id="Downloads"></div>
               </div>
               <div class="folders" >
                 <div>Pictures</div> 
-                <div id="Pictures">24 MB</div>
+                <div id="Pictures"></div>
               </div>
               <div class="folders" >
-                <div>Video</div> 
-                <div id="Video">32 MB</div>
+                <div>Videos</div> 
+                <div id="Videos"></div>
               </div>
               <div class="folders" >
                 <div>Others</div> 
-                <div id="Others">72 MB</div>
+                <div id="Others"></div>
               </div>
             </div>
           </div>
@@ -118,7 +117,7 @@
       </div>
     </footer> -->
 </body>
-<script src="./style/script_preload.js">
+<script src="./style/login.js">
   console.log("yhh")
 // const { contextBridge, ipcRenderer, ipcMain } = require("electron");
 // // const whatt = document.getElementById("schedule");

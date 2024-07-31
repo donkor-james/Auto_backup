@@ -18,28 +18,36 @@
   </div>
 
   <section class="main">
-    <div class="main_wrapper">
+    <div class="main_wrapper" id="main_wrapper">
       <h1>Create An Accounts</h1>
       <form action="" method="post" class="form" id="form">
         <div class="input">
           <input type="text" id="username" name="username" placeholder="Username" required>
+          <div class="passwd_warning" id="user_warning"></div>
         </div>
-        <div class="input">
-          <!-- <input type="email" id="email" name="email" placeholder="Enter Email..." required> -->
-        </div>
+        <!-- <div class="input">
+        </div> -->
         <div class="input">
           <input type="password" id="passwd" name="password" placeholder="Create Password" required>
+          <div class="passwd_warning" id="passwd_warning"></div>
+        </div>
+        <div class="input">
+          <input type="password" id="confirm_passwd" name="password" placeholder="Confirm Password" required>
+          <div class="passwd_warning" id="passwd_warning2"></div>
         </div>
     
-        <a href="#"><input class="btn" type="submit" onclick="sub()" value="sign up"></a>
+        <!-- <a href="#"><input class="btn" type="submit" onclick="sub()" value="sign up"></a> -->
         <!-- <button  type="submit"><a href="">Sign Up</a></button> -->
       </form>
+      <div class="btn" id="register_btn" onclick="submit()">Register</div>
       <div class="login">
         <span>Already have an account ?</span>
-        <a href="./login.html">Log In</a>
+        <div class="login_link" id="login_link" onclick="loginLink()">Log In</div>
       </div>
     </div>
-    </section>
+
+    <!-- Login  -->
+ 
 
     <footer class="footer">
       <div>
@@ -48,25 +56,7 @@
       </div>
     </footer>
 </body>
-<script src="./script.js">
-  const form = document.getElementsByClassName('form')
-  let form2 = document.getElementById('form')
+<script src="./style/script_preload.js">
 
-  const sub = () => {
-    console.log('submitted')
-  }
-  sub()
-  form2.addEventListener('click', (e) => {
-    e.preventDefault()
-    console.log(form, "this works", form2)
-
-  })
-
-  //   const { remote } = require("electron");
-  //   document.getElementById("close_btn").addEventListener("click", () => {
-  //     console.log("close")
-  //     let win = remote.BrowserWindow.getFocusedWindow();
-  //     win.close();
-  // });
 </script>
 </html>

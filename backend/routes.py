@@ -1,9 +1,19 @@
 import os
+import json
 from flask import request, jsonify, Blueprint
 from models import db, File, Folder, User
 
 api_routes = Blueprint('api', __name__)
-user = {}
+userId = 1
+user2 = {
+    "name": '',
+    "backup_schedule": '',
+    "backedup_at": '',
+    "restore_path": '',
+    "password": '',
+    "isFirstTime": True,
+    "total_data": ''
+}
 
 
 @api_routes.route('/files', methods=['GET'])
@@ -105,56 +115,131 @@ def delete_folder(folder_id):
     return jsonify({'result': True})
 
 
-backup_schedule = db.column(db.String)
 # restore_path
 
 
-@api_routes.route('/user', methods=['GET'])
+@api_routes.route('/users', methods=['GET'])
 def get_user():
     users = User.query.all()
-    print(users)
-    return jsonify({'user': [{'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "user": user.restore_path, "total_data": user.total_data}for user in users]})
-    # return jsonify({'folders': [{'id': folder.id, 'name': folder.name, 'folder_size': folder.folder_size} for folder in folders]})
+    # print(users[0])
+    # "password": '',
+    # "isFirstTime": True,
+    return jsonify({'user': [{'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "restore_path": user.restore_path, "password": user.password, "isFirstTime": user.isFirstTime, "total_data": user.total_data}for user in users]})
 
+#     name = db.Column(db.String(100), nullable=False)
+#     password = db.Column(db.String, nullable=False)
+#     isFirstTime = db.Column(db.Boolean, default=True)
+#     backup_schedule = db.Column(db.String)
+#     backedup_at = db.Column(DateTime, default=None)
+#     total_data = db.Column(db.String)
+#     restore_path = db.Column(db.String)
+
+
+# @api_routes.route('/user', methods=['POST'])
+# def new_user():
+#     data = request.json
+#     user = User(name=data['name'], password=data["password"], isFirstTime=data["isFirstTime"], backup_schedule=data['backup_schedule'],
+#                 total_data=data['total_data'])
+
+#     db.session.add(user)
+#     db.session.commit()
+#     print(user)
+#     return jsonify({'user': {'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "user": user.restore_path, "total_data": user.total_data, "isFirstTime": user.isFirstTime, "password": user.password}})
+
+
+@api_routes.route('/user', methods=["POST"])
+def create_user():
+    data = request.json
+    user = User(name=data["name"], password=data["password"],
+                isFirstTime=data["isFirstTime"])
+
+    db.session.add(user)
+    db.session.commit()
+    return ({"user": {"name": user.name, "password": user.password, "isFirstTime": user.isFirstTime, "backup_schedule": user.backup_schedule, "total_data": user.total_data, "restore_path": user.restore_path}})
+    # id = db.Column(db.Integer, primary_key=True)
     # name = db.Column(db.String(100), nullable=False)
-    # backup_schedule = db.column(db.String)
-    # backedup_at = db.column(DateTime, default=None)
+    # password = db.Column(db.String, nullable=False)
+    # isFirstTime = db.Column(db.Boolean, default=True)
+    # backup_schedule = db.Column(db.String)
+    # backedup_at = db.Column(DateTime, default=None)
     # total_data = db.Column(db.String)
+    # restore_path = db.Column(db.String)
+# @api_routes.route('/folder', methods=['POST'])
+# def create_folder():
+#     data = request.json
+#     new_folder = File(name=data['name'], folder_size=data['folder_size'])
+
+#     db.session.add(new_folder)
+#     db.session.commit()
+
+#     return jsonify({'folder': {'id': new_folder.id, 'name': new_folder.name, 'folder_size': new_folder.folder_size}})
 
 
-@api_routes.route('/user/<int:id>', methods=['POST'])
-def update_user(id):
+@api_routes.route('/updateUser', methods=['PUT'])
+def update_user():
     data = request.json
-    user = User.query.get(id)
-    user.name = data.get("name", user.name)
-    user.backup_schedule = data.get("name", user.backup_schedule)
-    user.backedup_at = data.get("name", user.backedup_at)
-    user.total_data = data.get("name", user.total_data)
-    db.session.commit()
+    with open("Auto_backup/userdata.json", "r") as file:
+        login_credentials = json.load(file)
 
-    return jsonify({'user': {'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "user": user.restore_path, "total_data": user.total_data}})
+        user = User.query.get(login_credentials["id"])
+        print(data, "this is update data line 185")
+        print(user, "This is the user to be updated 186")
+
+        user.name = data.get("name", user.name)
+        # user.password = data.get("password", user.password)
+        user.isFirstTime = data.get("isFirstTime", user.isFirstTime)
+        user.backup_schedule = data.get(
+            "backup_schedule", user.backup_schedule)
+        user.restore_path = data.get("restore_path", user.restore_path)
+        user.total_data = data.get("total_data", user.total_data)
+
+        db.session.commit()
+        print(user, "this is user after updated")
+
+        return jsonify({'user': {'name': user.name, "backup_schedule": user.backup_schedule, "restore_path": user.restore_path, "total_data": user.total_data, "password": user.password}})
 
 
-@api_routes.route('/test/<init:id>', methods=['POST'])
-def update_test(id):
+@api_routes.route('/getUser', methods=['GET'])
+def user():
+    with open("Auto_backup/userdata.json", "r") as file:
+        login_credentials = json.load(file)
+        print(login_credentials, "login_cred")
+
+        user = User.query.get(login_credentials["id"])
+        print(user, "this getUser in the settings page line 209")
+        return jsonify({'user': {'name': user.name, "backup_schedule": user.backup_schedule, "restore_path": user.restore_path, "total_data": user.total_data, "password": user.password, "isFirstTime": user.isFirstTime}})
+
+
+@api_routes.route('/login', methods=['POST'])
+def login():
     data = request.json
-    user.name = data.get("name", user.name)
-    user.backup_schedule = data.get("name", user.backup_schedule)
-    user.backedup_at = data.get("name", user.backedup_at)
-    user.total_data = data.get("name", user.total_data)
-    db.session.commit()
+    # print(data)
+    username = data["name"]
+    password = data['password']
+    user = User.query.filter_by(name=username).first()
+    # print(user, userId)
+    # print(user.password, password)
+    if user and user.password == password:
+        login_credentials = {"isValid": True,
+                             "isFirstTime": user.isFirstTime, "id": user.id}
+        print(login_credentials, "line 225 and ", user)
+        with open("Auto_backup/userData.json", "w") as file:
+            json.dump(login_credentials, file)
 
-    return jsonify({'user': {'id': user.id, 'email': user.email}})
+        return jsonify({"valid": login_credentials})
+    else:
+        print("naaa")
+        return jsonify({"valid": {"isValid": False}})
 
-
-@api_routes.route('/test', methods=['GET'])
-def update_test():
-    # data = request.json
-    # user = {}
-    # user.name = data.get("name", user.name)
-    # user.backup_schedule = data.get("name", user.backup_schedule)
-    # user.backedup_at = data.get("name", user.backedup_at)
-    # user.total_data = data.get("name", user.total_data)
+    # user.name"] = data.get("name", user2["name"])
+    # user2["backup_schedule"] = data.get(
+    #     "backup_schedule", user2["backup_schedule"])
+    # user2["backedup_at"] = data.get("backedup_at", user2["backedup_at"])
+    # user2["restore_path"] = data.get("restore_path", user2["restore_path"])
+    # user2["password"] = data.get("password", user2["password"])
+    # user2["isFirstTime"] = data.get("isFirstTime", user2["isFirstTime"])
+    # user2["total_data"] = data.get("total_data", user2["total_data"])
     # db.session.commit()
 
-    return jsonify({'user': {'id': user.id, 'email': user.email}})
+    # print(user2, data.get("backup_schedule"))
+    # return jsonify({'user': {'name': user2["name"], "backup_schedule": user2["backup_schedule"], "backedup_at": user2["backedup_at"], "user": user2["restore_path"], "total_data": user2["total_data"]}})

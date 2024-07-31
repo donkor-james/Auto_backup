@@ -5,7 +5,6 @@ import os
 from flask_cors import CORS
 from routes import api_routes
 from models import db
-
 app = Flask(__name__)
 CORS(app)
 app.register_blueprint(api_routes, url_prefix='/api')
@@ -26,7 +25,7 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
     print(db.metadata.tables.keys(), "yhh")
-    # db.drop_all()
+#     # db.drop_all()
 
 # # Run Server
 if __name__ == '__main__':

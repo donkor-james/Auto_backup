@@ -24,7 +24,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "./renderer/settings.html"));
+  mainWindow.loadFile(path.join(__dirname, "./renderer/index.html"));
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
@@ -108,8 +108,8 @@ ipcMain.on("postDataForRequest", (event, postData) => {
   const options = {
     hostname: "localhost",
     port: 5000,
-    path: "/api/test",
-    method: "POST",
+    path: "/api/updateUser",
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
       "Content-Length": Buffer.byteLength(postDataString),
@@ -118,6 +118,7 @@ ipcMain.on("postDataForRequest", (event, postData) => {
 
   const req = http.request(options, (res) => {
     let data = "";
+    console.log(postData);
 
     res.on("data", (chunk) => {
       data += chunk;
@@ -132,9 +133,11 @@ ipcMain.on("postDataForRequest", (event, postData) => {
             return;
           }
           const existData = JSON.parse(userData);
-
-          existData.id = JSON.parse(data).user.id;
-          existData.email = JSON.parse(data).user.email;
+          existData.name = JSON.parse(data).user.name;
+          existData.backup_schedule = JSON.parse(data).user.backup_schedule;
+          existData.backedup_at = JSON.parse(data).user.backedup_at;
+          existData.restore_path = JSON.parse(data).user.restore_path;
+          existData.total_data = JSON.parse(data).user.total_data;
 
           const updated_data = existData;
 
@@ -153,7 +156,6 @@ ipcMain.on("postDataForRequest", (event, postData) => {
           console.log(err);
         });
       }
-      console.log(JSON.parse(data).user.email + "yhg");
       mainWindow.webContents.send("gotUser", data);
     });
     // const user = JSON.parse(data);

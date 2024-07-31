@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 import datetime
 import shutil
 import schedule
@@ -16,8 +17,39 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from googleapiclient.http import MediaFileUpload
-from models import db, File, Folder
+from models import db, File, Folder, User
 from app import app
+
+backup_intervals = {
+    "Daily": 1,
+    "Weekly": 7,
+    "Monthly": 30
+}
+
+
+def do_smn():
+    print("Doing task")
+
+
+def backup_scheduler():
+    global last_interval
+    with app.app_context():
+        with open("Auto_backup/userdata.json", "r") as file:
+            login_credentials = json.load(file)
+            print(login_credentials, "login_cred")
+
+            user = User.query.get(login_credentials["id"])
+
+            backup_schdule = user.backup_schedule
+
+            if backup_schdule and backup_schdule != "On Arrival" and backup_schdule != last_interval:
+                schedule.clear("task")
+                interval = backup_intervals[backup_schdule]
+                schedule.every(interval).minutes.do(do_smn).tag("task")
+
+                last_interval = backup_schdule
+
+                print(f"updated task schedule to run every {last_interval}")
 # backup directory to another folder
 
 # with app.app_context():
@@ -286,7 +318,9 @@ if __name__ == '__main__':
 
     try:
         while True:
+            schedule.run_pending()
             time.sleep(1)
+            backup_scheduler()
     except KeyboardInterrupt:
         folder1_observer.stop()
         folder2_observer.stop()
@@ -295,3 +329,4 @@ if __name__ == '__main__':
         folder1_observer.join()
         folder2_observer.join()
         folder3_observer.join()
+print(type(""))
