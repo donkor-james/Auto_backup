@@ -26,6 +26,8 @@ backup_intervals = {
     "Monthly": 30
 }
 
+file_path = "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json"
+
 
 def do_smn():
     print("Doing task")
@@ -34,18 +36,18 @@ def do_smn():
 def backup_scheduler():
     global last_interval
     with app.app_context():
-        with open("Auto_backup/userdata.json", "r") as file:
+        with open(file_path, "r") as file:
             login_credentials = json.load(file)
             print(login_credentials, "login_cred")
 
             user = User.query.get(login_credentials["id"])
 
             backup_schdule = user.backup_schedule
-
+            # intervall  = backup_intervals.get(backup_schdule, None)
             if backup_schdule and backup_schdule != "On Arrival" and backup_schdule != last_interval:
                 schedule.clear("task")
                 interval = backup_intervals[backup_schdule]
-                schedule.every(interval).minutes.do(do_smn).tag("task")
+                schedule.every(interval).days.do(upload_res).tag("task")
 
                 last_interval = backup_schdule
 
@@ -86,7 +88,7 @@ def get_folder_size(path):
         elif os.path.isdir(item_path):
             total_size += get_folder_size(item_path)
 
-    return humanize.naturalsize(total_size)
+    return total_size
     # size = sum(os.path.getsize(os.path.join(root, filename))
     #            for root, _, filenames in os.walk(path) for filename in filenames)
 
@@ -237,11 +239,18 @@ def copy_to_backup(source, dest, event, home_dir_temp):
 
     for key in monitored_folders.keys():
         if key in event_path:
+            with open(file_path, "r") as file:
+            login_credentials = json.load(file)
+            print(login_credentials, "login_cred")
+
+            user = User.query.get(login_credentials["id"])
+
             with app.app_context():
                 folder = db.session.query(Folder).filter_by(name=key).first()
                 size = get_folder_size(dest)
-                folder.folder_size = size
+                folder.folder_size = humanize.naturalsize(size)
                 db.session.commit()
+                user = db.session
             break
     return f"{last_file} backup in {dest}"
 
@@ -267,10 +276,11 @@ def on_created(event):
             if not os.path.exists(backup_path):
                 os.mkdir(backup_path)
                 size = get_folder_size(backup_path)
+                new_size = humanize.naturalsize(size)
 
                 folder_meta = {
                     "name": key,
-                    "folder_size": size
+                    "folder_size": new_size
                 }
                 with app.app_context():
                     new_folder = Folder(
@@ -283,7 +293,7 @@ def on_created(event):
                 home_dir_temp, backup_path, event, home_dir_temp)
             break
         with app.app_context():
-            with open("Auto_backup/userdata.json", "r") as file:
+            with open(file_path, "r") as file:
                 login_credentials = json.load(file)
                 print(login_credentials, "login_cred")
 
