@@ -25,12 +25,13 @@ backup_intervals = {
     "Weekly": 7,
     "Monthly": 30
 }
+last_interval = None
 
 file_path = "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json"
 
 
 def do_smn():
-    print("Doing task")
+    print(f"Doing task on {last_interval} basics")
 
 
 def backup_scheduler():
@@ -38,20 +39,21 @@ def backup_scheduler():
     with app.app_context():
         with open(file_path, "r") as file:
             login_credentials = json.load(file)
-            print(login_credentials, "login_cred")
+            # print(login_credentials, "login_cred")
 
             user = User.query.get(login_credentials["id"])
 
             backup_schdule = user.backup_schedule
-            # intervall  = backup_intervals.get(backup_schdule, None)
+            # print()
+            # intervall = backup_intervals.get(backup_schdule, None)
             if backup_schdule and backup_schdule != "On Arrival" and backup_schdule != last_interval:
                 schedule.clear("task")
                 interval = backup_intervals[backup_schdule]
+                print(f"---- Changing scheduler to {interval} seconds----")
                 schedule.every(interval).days.do(upload_res).tag("task")
-
                 last_interval = backup_schdule
 
-                print(f"updated task schedule to run every {last_interval}")
+                # print(f"updated task schedule to run every {last_interval}")
 # backup directory to another folder
 
 # with app.app_context():
@@ -87,8 +89,23 @@ def get_folder_size(path):
             total_size += os.path.getsize(item_path)
         elif os.path.isdir(item_path):
             total_size += get_folder_size(item_path)
-
     return total_size
+
+
+def to_bytes(size):
+    units = {
+        "kb": 1024,
+        "mb": 1024 ** 2,
+        "gb": 1024 ** 3,
+        "tb": 1024 ** 4
+    }
+
+    for unit in units.keys():
+        size_unit = size.slipt(" ")
+        if size_unit[1].lower() == unit:
+            number = size[: - len(unit)]
+            return int(float(number) * units[unit])
+
     # size = sum(os.path.getsize(os.path.join(root, filename))
     #            for root, _, filenames in os.walk(path) for filename in filenames)
 
@@ -233,25 +250,31 @@ def copy_to_backup(source, dest, event, home_dir_temp):
             shutil.rmtree(dest_dir)
         shutil.copytree(temp_source, dest_dir)
 
-        # size = get_folder_size()
-        # new_folder = Folder(file, )
-        # return f'source: {temp_source} \ndest: {dest_dir}'
-
     for key in monitored_folders.keys():
         if key in event_path:
             with open(file_path, "r") as file:
-            login_credentials = json.load(file)
-            print(login_credentials, "login_cred")
+                login_credentials = json.load(file)
+                # print(login_credentials, "login_cred")
 
-            user = User.query.get(login_credentials["id"])
+                with app.app_context():
+                    folder = db.session.query(
+                        Folder).filter_by(name=key).first()
+                    size = get_folder_size(dest)
+                    folder.folder_size = humanize.naturalsize(size)
 
-            with app.app_context():
-                folder = db.session.query(Folder).filter_by(name=key).first()
-                size = get_folder_size(dest)
-                folder.folder_size = humanize.naturalsize(size)
-                db.session.commit()
-                user = db.session
+                    user = User.query.get(login_credentials["id"])
+                    total_data = user.total_data
+                    total_bytes = to_bytes(total_data)
+                    total_bytes = total_bytes + size
+                    # parsed_data = humanize.pa total_data
+                    user.total_data = humanize.naturalsize(total_bytes)
+                    db.session.commit()
+                    # user = db.session
             break
+
+        # size = get_folder_size()
+        # new_folder = Folder(file, )
+        # return f'source: {temp_source} \ndest: {dest_dir}'
     return f"{last_file} backup in {dest}"
 
 
@@ -301,7 +324,8 @@ def on_created(event):
 
             backup_schdule = user.backup_schedule
             if backup_schdule == "On Arrival":
-                upload_res(backup_path, creds, event.src_path)
+                print(f"backing {event.src_path} on arrival")
+                # upload_res(backup_path, creds, event.src_path)
 
 
 if __name__ == '__main__':

@@ -46,7 +46,7 @@ fetch("http://localhost:5000/api/folders")
         }
         console.log(files.folder_size);
         // whattodo.innerHTML = files.id;
-        // console.log(JSON.stringify(files));
+        console.log(JSON.stringify(files));
       }
     } else {
       for (let elements of list2) {
