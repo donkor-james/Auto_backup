@@ -180,7 +180,7 @@ def create_user():
 @api_routes.route('/updateUser', methods=['PUT'])
 def update_user():
     data = request.json
-    with open("Auto_backup/userdata.json", "r") as file:
+    with open("C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json", "r") as file:
         login_credentials = json.load(file)
 
         user = User.query.get(login_credentials["id"])

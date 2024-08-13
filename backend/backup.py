@@ -25,6 +25,15 @@ backup_intervals = {
     "Weekly": 7,
     "Monthly": 30
 }
+
+monitored_folders = {
+    "Documents": "OneDrive\\Documents",
+    "Downloads": "Downloads",
+    "Desktop": "Desktop",
+    "Videos": "Videos",
+    "Music": "Music"
+}
+
 last_interval = None
 
 file_path = "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json"
@@ -69,13 +78,6 @@ def backup_scheduler():
 #         print("New\n", obj.file_size, type(obj.file_size))
 
 
-monitored_folders = {
-    "Documents": "OneDrive\\Documents",
-    "Downloads": "Downloads",
-    "Desktop": "Desktop",
-    "Videos": "Videos",
-    "Music": "Music"
-}
 # Upload file and folders to google cloud
 
 
@@ -101,11 +103,16 @@ def to_bytes(size):
     }
 
     for unit in units.keys():
-        size_unit = size.slipt(" ")
-        if size_unit[1].lower() == unit:
-            number = size[: - len(unit)]
-            return int(float(number) * units[unit])
-
+        if size:
+            size_unit = size.split(" ")
+            print(size)
+            if size_unit[1] == unit:
+                number = size[: - len(unit)]
+                return int(float(number) * units[unit])
+            else:
+                return size
+        else:
+            return 0
     # size = sum(os.path.getsize(os.path.join(root, filename))
     #            for root, _, filenames in os.walk(path) for filename in filenames)
 
@@ -260,12 +267,14 @@ def copy_to_backup(source, dest, event, home_dir_temp):
                     folder = db.session.query(
                         Folder).filter_by(name=key).first()
                     size = get_folder_size(dest)
-                    folder.folder_size = humanize.naturalsize(size)
+                    size = humanize.naturalsize(size)
+                    folder.folder_size = size
 
                     user = User.query.get(login_credentials["id"])
                     total_data = user.total_data
                     total_bytes = to_bytes(total_data)
-                    total_bytes = total_bytes + size
+                    new_size = to_bytes(size)
+                    total_bytes = total_bytes + new_size
                     # parsed_data = humanize.pa total_data
                     user.total_data = humanize.naturalsize(total_bytes)
                     db.session.commit()
@@ -298,30 +307,35 @@ def on_created(event):
             home_dir_temp = home_dir + "\\" + monitored_folders[key]
             if not os.path.exists(backup_path):
                 os.mkdir(backup_path)
-                size = get_folder_size(backup_path)
-                new_size = humanize.naturalsize(size)
-
-                folder_meta = {
-                    "name": key,
-                    "folder_size": new_size
-                }
-                with app.app_context():
-                    new_folder = Folder(
-                        name=folder_meta["name"], folder_size=folder_meta["folder_size"])
-
-                    db.session.add(new_folder)
-                    db.session.commit()
 
             msg = copy_to_backup(
                 home_dir_temp, backup_path, event, home_dir_temp)
             break
+
         with app.app_context():
+            size = get_folder_size(backup_path)
+            new_size = humanize.naturalsize(size)
+
+            folder_meta = {
+                "name": key,
+                "folder_size": new_size
+            }
+            new_folder = Folder(
+                name=folder_meta["name"], folder_size=folder_meta["folder_size"])
+
             with open(file_path, "r") as file:
                 login_credentials = json.load(file)
                 print(login_credentials, "login_cred")
 
                 user = User.query.get(login_credentials["id"])
+                # user_Total_data = user.total_data
 
+                # user_Total_data = to_bytes(user_Total_data)
+                # print(size, user_Total_data)
+                # user_Total_data = humanize.naturalsize(size+user_Total_data)
+                # user.total_data = user_Total_data
+
+                # db.session.commit()
             backup_schdule = user.backup_schedule
             if backup_schdule == "On Arrival":
                 print(f"backing {event.src_path} on arrival")
