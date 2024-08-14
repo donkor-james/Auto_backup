@@ -28,7 +28,7 @@ backup_intervals = {
 
 monitored_folders = {
     "Documents": "OneDrive\\Documents",
-    "Downloads": "Downloads",
+    # "Downloads": "Downloads",
     "Desktop": "Desktop",
     "Videos": "Videos",
     "Music": "Music"
@@ -104,13 +104,14 @@ def to_bytes(size):
 
     for unit in units.keys():
         if size:
-            size_unit = size.split(" ")
-            print(size)
-            if size_unit[1] == unit:
+            size_list = size.split(" ")
+            size_unit = size_list[1]
+            print(size, size_unit.lower())
+            if size_unit.lower() == unit:
                 number = size[: - len(unit)]
                 return int(float(number) * units[unit])
             else:
-                return size
+                return int(size_list[0])
         else:
             return 0
     # size = sum(os.path.getsize(os.path.join(root, filename))
@@ -276,6 +277,7 @@ def copy_to_backup(source, dest, event, home_dir_temp):
                     new_size = to_bytes(size)
                     total_bytes = total_bytes + new_size
                     # parsed_data = humanize.pa total_data
+                    print(total_bytes)
                     user.total_data = humanize.naturalsize(total_bytes)
                     db.session.commit()
                     # user = db.session
@@ -350,7 +352,7 @@ if __name__ == '__main__':
 
     folder1 = home_dir + "\\" + monitored_folders["Videos"]
     folder2 = home_dir + "\\" + monitored_folders["Documents"]
-    folder3 = home_dir + "\\" + monitored_folders["Downloads"]
+    # folder3 = home_dir + "\\" + monitored_folders["Downloads"]
     folder4 = home_dir + "\\" + monitored_folders["Desktop"]
     folder5 = home_dir + "\\" + monitored_folders["Music"]
 
@@ -369,7 +371,7 @@ if __name__ == '__main__':
     folder2_observer.start()
 
     folder3_observer = Observer()
-    folder3_observer.schedule(event_handler, folder3, recursive=True)
+    folder3_observer.schedule(event_handler, folder5, recursive=True)
     folder3_observer.start()
 
     try:
