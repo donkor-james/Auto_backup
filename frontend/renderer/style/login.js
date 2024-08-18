@@ -24,9 +24,10 @@ const usernameHome = document.getElementById("heading_details");
 const fs = require("fs");
 
 function loginLink() {
+  console.log("clicked on loginLink");
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
-
+    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\restore.html";
+  console.log(window.location.href);
   wrapper.style.display = "none";
 }
 
@@ -63,7 +64,7 @@ fetch("http://localhost:5000/api/folders")
     const list2 = [Desktop, Documents, Downloads, Pictures, Videos, Others];
     // const data = JSON.parse(json).folders;
     folders = data.folders;
-    console.log(folders.length);
+    console.log(folders.length, folders);
     if (folders.length != 0) {
       for (let files of data.folders) {
         for (let div of list) {
@@ -72,7 +73,17 @@ fetch("http://localhost:5000/api/folders")
             list2[index].innerHTML = files.folder_size;
             console.log(files.folder_size);
           }
+          // else if(list.indexOf()){
+
+          // }
         }
+        // for (let div of list) {
+        //   if (files.name === div) {
+        //     index = list.indexOf(div);
+        //     list2[index].innerHTML = files.folder_size;
+        //     console.log(files.folder_size);
+        //   }
+        // }
         console.log(files.folder_size);
         // whattodo.innerHTML = files.id;
         // console.log(JSON.stringify(files));
@@ -80,7 +91,7 @@ fetch("http://localhost:5000/api/folders")
     } else {
       for (let elements of list2) {
         console.log(elements);
-        elements.innerHTML = "0 KB";
+        elements.innerHTML = "0 Bytes";
       }
     }
     // what.value = data.email

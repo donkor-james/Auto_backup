@@ -19,6 +19,7 @@ const default_path = document.getElementById("radio");
 const own_path = document.getElementById("radio1");
 const own_path_value = document.getElementById("own_path_value");
 const path_empty = document.getElementById("path_empty");
+const Total = document.getElementById("Total");
 
 fetch("http://localhost:5000/api/folders")
   .then((response) => response.json())
@@ -30,12 +31,19 @@ fetch("http://localhost:5000/api/folders")
     let Videos = document.getElementById("Videos");
     let Others = document.getElementById("Others");
 
-    const list = ["Desktop", "Documents", "Downloads", "Videos", "Others"];
+    const list = [
+      "Desktop",
+      "Documents",
+      "Downloads",
+      "Pictures",
+      "Videos",
+      "Others",
+    ];
     const list2 = [Desktop, Documents, Downloads, Pictures, Videos, Others];
     // const data = JSON.parse(json).folders;
     folders = data.folders;
     console.log(folders.length, folders);
-    if (folders.length < 0) {
+    if (folders.length !== 0) {
       for (let files of data.folders) {
         for (let div of list) {
           if (files.name === div) {
@@ -51,7 +59,7 @@ fetch("http://localhost:5000/api/folders")
     } else {
       for (let elements of list2) {
         console.log(elements);
-        elements.innerHTML = "0 KB";
+        elements.innerHTML = "0 Bytes";
       }
     }
     // what.value = data.email
@@ -65,6 +73,7 @@ fetch("http://localhost:5000/api/getUser")
 
     // options = selectElement.options;
     // console.log(options);
+    Total.innerHTML = user.total_data;
     const options = selectElement.options;
     console.log(user);
     for (let option of options) {

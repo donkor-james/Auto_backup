@@ -96,6 +96,7 @@ def get_folder_size(path):
 
 def to_bytes(size):
     units = {
+        "bytes": 1,
         "kb": 1024,
         "mb": 1024 ** 2,
         "gb": 1024 ** 3,
@@ -104,14 +105,15 @@ def to_bytes(size):
 
     for unit in units.keys():
         if size:
+            print(size, "sizee")
             size_list = size.split(" ")
             size_unit = size_list[1]
             print(size, size_unit.lower())
             if size_unit.lower() == unit:
                 number = size[: - len(unit)]
                 return int(float(number) * units[unit])
-            else:
-                return int(size_list[0])
+            # else:
+            #     return int(size_list[0])
         else:
             return 0
     # size = sum(os.path.getsize(os.path.join(root, filename))
@@ -267,19 +269,35 @@ def copy_to_backup(source, dest, event, home_dir_temp):
                 with app.app_context():
                     folder = db.session.query(
                         Folder).filter_by(name=key).first()
+
+                    folders = db.session.query(
+                        Folder).filter_by(name=key).first()
                     size = get_folder_size(dest)
-                    size = humanize.naturalsize(size)
-                    folder.folder_size = size
+                    print(folder, "273", key)
+                    folder_size = to_bytes(folder.folder_size)
+                    total_folder_size = size + folder_size
+                    print(total_folder_size, "total", )
+                    total_folder_size = humanize.naturalsize(total_folder_size)
+                    folder.folder_size = total_folder_size
 
                     user = User.query.get(login_credentials["id"])
                     total_data = user.total_data
+                    print("Total Data")
                     total_bytes = to_bytes(total_data)
-                    new_size = to_bytes(size)
-                    total_bytes = total_bytes + new_size
+                    print("SIze")
+                    # new_size = to_bytes(size)
+                    total_bytes = total_bytes + size
                     # parsed_data = humanize.pa total_data
                     print(total_bytes)
                     user.total_data = humanize.naturalsize(total_bytes)
                     db.session.commit()
+                    print("size of folder", folder.folder_size)
+
+                    backup_schdule = user.backup_schedule
+                    if backup_schdule == "On Arrival":
+                        print(f"backing {event.src_path} on arrival")
+                # upload_res(backup_path, creds, event.src_path)
+
                     # user = db.session
             break
 
@@ -300,6 +318,7 @@ def on_modified(event):
 
 def on_created(event):
     home_dir = os.path.expanduser('~')
+    home_dir_temp = ""
     backup_path = os.path.expanduser('~')
     backup_path = backup_path + "\OneDrive\Desktop\Pictures\Backup"
 
@@ -310,38 +329,42 @@ def on_created(event):
             if not os.path.exists(backup_path):
                 os.mkdir(backup_path)
 
+                with app.app_context():
+                    size = get_folder_size(backup_path)
+                    new_size = humanize.naturalsize(size)
+
+                # db.session.delete(music)
+
+                    folder_meta = {
+                        "name": key,
+                        "folder_size": new_size
+                    }
+                    new_folder = Folder(
+                        name=folder_meta["name"], folder_size=folder_meta["folder_size"])
+
+                # db.session.add(new_folder)
+                    music = Folder.query.all()
+                    db.session.commit()
+                # print(home_dir_temp, new_folder.folder_size,
+                #       new_folder.id, key, "this is the key", new_folder, Folder)
+
+                    print(music)
             msg = copy_to_backup(
                 home_dir_temp, backup_path, event, home_dir_temp)
-            break
 
-        with app.app_context():
-            size = get_folder_size(backup_path)
-            new_size = humanize.naturalsize(size)
+            # with open(file_path, "r") as file:
+            # login_credentials = json.load(file)
+            # print(login_credentials, "login_cred")
 
-            folder_meta = {
-                "name": key,
-                "folder_size": new_size
-            }
-            new_folder = Folder(
-                name=folder_meta["name"], folder_size=folder_meta["folder_size"])
+            # user = User.query.get(login_credentials["id"])
+            # # user_Total_data = user.total_data
 
-            with open(file_path, "r") as file:
-                login_credentials = json.load(file)
-                print(login_credentials, "login_cred")
+            # # user_Total_data = to_bytes(user_Total_data)
+            # # print(size, user_Total_data)
+            # # user_Total_data = humanize.naturalsize(size+user_Total_data)
+            # # user.total_data = user_Total_data
 
-                user = User.query.get(login_credentials["id"])
-                # user_Total_data = user.total_data
-
-                # user_Total_data = to_bytes(user_Total_data)
-                # print(size, user_Total_data)
-                # user_Total_data = humanize.naturalsize(size+user_Total_data)
-                # user.total_data = user_Total_data
-
-                # db.session.commit()
-            backup_schdule = user.backup_schedule
-            if backup_schdule == "On Arrival":
-                print(f"backing {event.src_path} on arrival")
-                # upload_res(backup_path, creds, event.src_path)
+            # # db.session.commit()
 
 
 if __name__ == '__main__':

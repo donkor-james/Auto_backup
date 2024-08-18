@@ -36,7 +36,7 @@ class Folder(db.Model):
     folder_size = db.Column(db.String)
 
     def __repr__(self):
-        return f"folder('{self.name}', '{self.folder_size}!')"
+        return f"folder('{self.name}', '{self.folder_size}, {self.id}')"
 
 
 #     print("yess")
