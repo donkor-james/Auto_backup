@@ -155,7 +155,7 @@ span img{
     margin-left: auto;
 }
 
-#row_head{
+/* #row_head{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -163,14 +163,14 @@ span img{
     height: 7.4vh;
     background-color: rgb(99, 232, 119);
     border:1px solid;
-    /* margin-bottom: 3px; */
-}
+    margin-bottom: 3px;
+} */
 
-#qn, #qn_2, #qn_3{
+/* #qn, #qn_2, #qn_3{
     padding: 0px 4px;
     color: black;
     /* border: 1px solid; */
-}
+} */
 
 #down_arr, #down_arr_2, #down_arr_3{
     font-size: 24px;
@@ -196,6 +196,7 @@ span img{
 .settings{
     padding-bottom: 10px;
 }
+
 
 .settings_title{
     display: flex;
@@ -298,10 +299,30 @@ span img{
 }
 
 .heading{
-    font-size: 17.8px;
+    font-size: 16.2px;
     font-weight: bold;
+    margin-top: 8px;
 }
 
+.settings_heading{
+    font-size: 27px;
+    margin: 0px 0px -8px 0px;
+}
+
+.sub_sections .settings_heading{
+    margin-bottom: 0px;
+    margin-top: 22px;
+    font-size: 22px;
+}
+
+.heading_info{
+    margin-bottom: 8px;
+}
+
+#total_data{
+    margin-left: 8px;
+    font-weight: normal;
+}
 
 
 .select{

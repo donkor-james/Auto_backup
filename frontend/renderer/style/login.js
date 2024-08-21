@@ -21,6 +21,7 @@ const own_path = document.getElementById("radio1");
 const own_path_value = document.getElementById("own_path_value");
 const path_empty = document.getElementById("path_empty");
 const usernameHome = document.getElementById("heading_details");
+const total_data = document.getElementById("total_data");
 const fs = require("fs");
 
 function loginLink() {
@@ -41,6 +42,7 @@ fetch("http://localhost:5000/api/getUser")
     usernameHome.innerHTML = data.user.name;
     backup.value = data.user.backup_schedule;
     restore.value = data.user.restore_path;
+    total_data.innerHTML = data.user.total_data;
     console.log(JSON.stringify(data.user) + "yhhhh");
   });
 fetch("http://localhost:5000/api/folders")

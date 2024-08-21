@@ -31,33 +31,63 @@
       <!-- right -->
       <div class="settings_right">
         <div class="right_wrapper">
+          <h2 class="settings_heading">Settings</h2>
           <div class="sub_sections">
+            <h3 class="settings_heading">User Info:</h3>
             <div class="heading">
               Username
             </div>
             <div class="heading_details" id="heading_details">
             </div>
+            <div class="heading">
+              Email
+            </div>
+            <div class="heading_details" id="heading_details">
+              example@gmail.com
+            </div>
           </div>
 
           <div class="sub_sections">
-            <div class="heading" id="">
-              Scheduled Backup
+            <h3 class="settings_heading">Backup Info:</h3>
+            <div>
+              <div class="heading" id="">
+                Scheduled Backup
+              </div>
+              <div class="heading_info">
+                selected schedule for data to be backed up to cloud
+              </div>
             </div>
             <div class="heading_details" class="div">
               <input type="text" value="" id="backup_path" class="schedule" readonly>
             </div>
+
+            <div>
+              <div class="heading" id="">
+                Backup Data:
+                <span class="heading_info" id="total_data"></span>
+              </div>
+
+            </div>
           </div>
           <div class="sub_sections">
+            <h3 class="settings_heading">Restore Info:</h3>
             <div class="heading">
               Restore Path
+            </div>
+            <div class="heading_info">
+              selected location where backed up data is restored back to on device
             </div>
             <div class="heading_details">
               <input type="text" value="" id="restore_path" readonly>
             </div>
+            <div class="heading" id="">
+              Last Restoration:
+              <span class="restore_span"> none</span>
+            </div>
 
           </div>
 
-          <div class="sub_sections">
+          <!-- <div class="sub_sections">
             <div class="heading ">
               Tracked Folders
             </div>
@@ -91,7 +121,7 @@
                 <div id="Others"></div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
