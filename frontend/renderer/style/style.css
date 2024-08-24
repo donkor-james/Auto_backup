@@ -170,7 +170,7 @@ span img{
     padding: 0px 4px;
     color: black;
     /* border: 1px solid; */
-} */
+/* } */
 
 #down_arr, #down_arr_2, #down_arr_3{
     font-size: 24px;
@@ -366,7 +366,12 @@ span img{
 .total_backup{
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    margin-top: -8px;
+    /* justify-content: space-between; */
+    gap: 15px;
+}
+.total_backup h4{
+    font-weight: normal;
 }
 
 .restore_path{

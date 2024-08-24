@@ -27,7 +27,7 @@ const fs = require("fs");
 function loginLink() {
   console.log("clicked on loginLink");
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\restore.html";
+    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
   console.log(window.location.href);
   wrapper.style.display = "none";
 }
