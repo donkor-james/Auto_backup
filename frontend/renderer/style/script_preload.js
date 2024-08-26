@@ -40,7 +40,7 @@ default_path.checked = true;
 
 function loginLink() {
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
+    "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
 
   wrapper.style.display = "none";
 }
@@ -80,10 +80,10 @@ function login() {
       if (valid.isValid) {
         if (valid.isFirstTime) {
           window.location.href =
-            "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\setup.html";
+            "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\setup.html";
         } else {
           window.location.href =
-            "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
+            "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
         }
       } else {
         login_warning.innerText = "Wrong username or password";
@@ -94,7 +94,7 @@ function login() {
 
 function signUp() {
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\index.html";
+    "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\index.html";
 }
 
 function submit() {
@@ -174,7 +174,7 @@ function submitSetup() {
       .then((data) => {
         console.log(data, "this is updated user after setup");
         window.location.href =
-          "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
+          "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
       });
     // ipcRenderer.send("postDataForRequest", registeredUser);
   } else if (own_path.checked) {
@@ -198,7 +198,7 @@ function submitSetup() {
           .then((data) => {
             console.log(data);
             window.location.href =
-              "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
+              "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\settings.html";
           });
       } else {
         path_empty.innerHTML = "Path does not exist";

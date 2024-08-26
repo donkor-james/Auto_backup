@@ -24,7 +24,7 @@ const Total = document.getElementById("Total");
 function loginLink() {
   console.log("clicked on loginLink");
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
+    "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
   console.log(window.location.href);
   wrapper.style.display = "none";
 }
@@ -82,6 +82,9 @@ fetch("http://localhost:5000/api/getUser")
     // options = selectElement.options;
     // console.log(options);
     Total.innerHTML = user.total_data;
+    if (!data.user.total_data) {
+      Total.innerHTML = "0 Bytes";
+    }
     const options = selectElement.options;
     console.log(user);
     for (let option of options) {

@@ -27,7 +27,7 @@ const fs = require("fs");
 function loginLink() {
   console.log("clicked on loginLink");
   window.location.href =
-    "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
+    "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\frontend\\renderer\\login.html";
   console.log(window.location.href);
   wrapper.style.display = "none";
 }
@@ -42,8 +42,12 @@ fetch("http://localhost:5000/api/getUser")
     usernameHome.innerHTML = data.user.name;
     backup.value = data.user.backup_schedule;
     restore.value = data.user.restore_path;
+
     total_data.innerHTML = data.user.total_data;
     console.log(JSON.stringify(data.user) + "yhhhh");
+    if (!data.user.total_data) {
+      total_data.innerHTML = "0 Bytes";
+    }
   });
 fetch("http://localhost:5000/api/folders")
   .then((response) => response.json())

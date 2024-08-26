@@ -41,10 +41,6 @@ last_interval = None
 
 file_path = "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\userData.json"
 
-with app.app_context():
-    files = File.query.all()
-    print(files, "files")
-
 
 def list_files(service, folder_id):
     query = f"'{folder_id}' in parents"
@@ -60,7 +56,6 @@ def download_file(service, file_id, file_name):
     done = False
     while done is False:
         status, done = downloader.next_chunk()
-        print(f'Download {int(status.progress() * 100)}%.')
     fh.seek(0)
 
     with open(file_name, 'wb') as f:
@@ -81,59 +76,41 @@ def restore_data():
         files = File.query.all()
     for item in items:
         if item['mimeType'] == 'application/vnd.google-apps.folder':
-            # Create local directory
-            # new_folder_path = os.path.join(local_path, item['name'])
-
-            # os.makedirs(new_folder_path, exist_ok=True)
             restore_data(item['id'])
         else:
-            # Download file
-            # download_file(service, item['id'], os.path.join(
-            #     local_path, item['name']))
             return
-
-
-# def do_smn():
-#     print(f"Doing task on {last_interval} basics")
 
 
 def backup_scheduler():
     global last_interval
+    global user_id
+    global drive_backup_id
+    global credens
+    dest2 = os.path.expanduser("~")
+    backup_path = dest2 + "\\backup"
+    # event_path2 = dest2
+    backup_folder_temp2 = dest2
+    backupParent2 = dest2
+    # global credens2
+    # event_path2
+    # credens, actual_path, backupParent, backup_temp
+
+    # print(credens, user_id, "user_id")
     with app.app_context():
         with open(file_path, "r") as file:
             login_credentials = json.load(file)
-            # print(login_credentials, "login_cred")
 
             user = User.query.get(login_credentials["id"])
 
             backup_schdule = user.backup_schedule
-            # print()
-            # intervall = backup_intervals.get(backup_schdule, None)
+
             if backup_schdule and backup_schdule != "On Arrival" and backup_schdule != last_interval:
                 schedule.clear("task")
                 interval = backup_intervals[backup_schdule]
-                print(f"---- Changing scheduler to {interval} seconds----")
-                schedule.every(interval).days.do(upload_res).tag("task")
+                print(f"---- Changing scheduler to {interval} days----")
+                schedule.every(interval).days.do(lambda: upload_res(
+                    credens, backup_path, backup_path, backup_path)).tag("task")
                 last_interval = backup_schdule
-
-                # print(f"updated task schedule to run every {last_interval}")
-# backup directory to another folder
-
-# with app.app_context():
-#     objects = db.session.query(File).all()
-
-#     for obj in objects:
-#         obj.file_size = str(obj.file_size) + " KB"
-
-#     db.session.commit()
-#     objs = db.session.query(File).all()
-
-
-#     for obj in objs:
-#         print("New\n", obj.file_size, type(obj.file_size))
-
-
-# Upload file and folders to google cloud
 
 
 def get_folder_size(path):
@@ -159,26 +136,33 @@ def to_bytes(size):
 
     for unit in units.keys():
         if isinstance(size, str):
-            print(size, "sizee")
             size_list = size.split(" ")
             size_unit = size_list[1]
-            print(size, size_unit.lower())
+            # print(size, size_unit.lower())
             if size_unit.lower() == unit:
                 number = size[: - len(unit)]
                 return int(float(number) * units[unit])
             elif size_unit.lower == "bytes":
                 return int(size_list[0])
-    size_list = size.split(" ")
-    return int(size_list[0])
+    if size != None and isinstance(size, str):
+        # print(size, "size now")
+        size_list = size.split(" ")
+        return int(size_list[0])
+    elif size != None and isinstance(size, int):
+        return size
+    else:
+        return 0
 
 
-def create_upload_folder(backup_file, folder_id, service, actual_path, backupParent, backup_temp):
+def create_upload_folder(folder_id, service, actual_path, backup_temp):
     global user_id
-    print(backup_temp, "uploading folder userId", user_id)
+    # global drive_backup_id
+
+    # print(backup_temp, "uploading folder userId", user_id)
     for root, dirs, files in os.walk(backup_temp):
         for file in files:
             if os.path.isfile(backup_temp+'\\'+file):
-                print("code to upload file")
+                # print("code to upload file")
                 file_metadata = {
                     'name': file,
                     'parents': [folder_id]
@@ -190,52 +174,52 @@ def create_upload_folder(backup_file, folder_id, service, actual_path, backupPar
                 upload_file = service.files().create(
                     body=file_metadata, media_body=media, fields='id').execute()
 
-                print(f"Backed up: {file}\nparent_folder: {backup_temp} \n")
+                print(f"\n\n--- Backed up:{file}  To: Google Drive ---\n")
 
                 file_size = os.path.getsize(backup_temp+'\\'+file)
                 with app.app_context():
                     new_file = File(name=file, file_size=file_size,
                                     file_path=backup_temp+"\\"+file)
                     db.session.add(new_file)
-                    print(user_id, "this is running")
+                    # print(user_id, "this is running")
                     user = User.query.get(user_id)
                     total_data = user.total_data
-                    print("old Total Data", total_data)
+                    # print("old Total Data", total_data)
                     total_bytes = to_bytes(total_data)
-                    print("SIze", file_size)
+                    # print("SIze", file_size)
                     new_size = to_bytes(file_size)
                     total_bytes = total_bytes + new_size
                     # parsed_data = humanize.pa total_data
-                    print(total_bytes)
+                    # print(total_bytes)
                     user.total_data = humanize.naturalsize(total_bytes)
-                    print(humanize.naturalsize(total_bytes))
+                    # print(humanize.naturalsize(total_bytes))
                     db.session.commit()
                     user = User.query.get(user_id)
-                    print("new total data", user.total_data)
+                    # print("new total data", user)
 
         for dir in dirs:
             inDrive = False
-            print("code to create and upload to folder")
+            # print("code to create and upload to folder")
 
             response = service.files().list(
                 q="name = '{}' and mimeType='application/vnd.google-apps.folder'".format(
                     dir),
                 spaces='drive').execute()
 
-            print(response['files'])
+            # print(response['files'])
             # for     response['files']
             for folders in response['files']:
-                print("160")
+                # print("160")
                 if dir == folders["name"]:
-                    print(folders["name"])
+                    # print(folders["name"])
                     parent_folder_id = folders["id"]
                     inDrive = True
                     break
                 else:
                     inDrive = False
-            print(inDrive)
+            # print(inDrive)
             if not inDrive:
-                print(response, "listing folders in drive")
+                # print(response, "listing folders in drive")
                 file_metadata = {
                     'name': dir,
                     "parents": [folder_id],
@@ -247,35 +231,18 @@ def create_upload_folder(backup_file, folder_id, service, actual_path, backupPar
 
             new_backup = backup_temp + "\\" + dir
             actual_path = actual_path + "\\" + dir
-#     id = db.Column(db.Integer, primary_key=True)
-    # name = db.Column(db.String(100), nullable=False)
-    # folder_size = db.Column(db.Integer)
-    # parent_id = db.Column(db.String(255), nullable=False)
 
-            # file_data = {
-            #     'name': dir,
-            #     'file_size': os.path.getsize(backup_file + '\\' + file),
-            #     'file_path': actual_path
-            # }
-
-    #   new_folder = Folder(dir, )
-
-    #    with app.app_context():
-    #         db.session.add(new_file)
-    #         db.session.commit()
-    #         print('saved to database successfully', new_file)
-
-            create_upload_folder(
-                new_backup, parent_folder_id, service, actual_path, dir, new_backup)
+            create_upload_folder(parent_folder_id, service,
+                                 actual_path, new_backup)
 
             shutil.rmtree(new_backup)
 
 
-def upload_res(backup_file, credens, actual_path, backupParent, backup_temp):
+def upload_res(credens, actual_path, backupParent, backup_temp):
     global user_id
     global drive_backup_id
 
-    print(credens, "this printed credens")
+    # print(credens, "this printed credens")
     if os.path.exists("C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\drive_credentials\\token.json"):
         credens = Credentials.from_authorized_user_file(
             "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\drive_credentials\\token.json", SCOPES)
@@ -283,7 +250,7 @@ def upload_res(backup_file, credens, actual_path, backupParent, backup_temp):
     if not credens or not credens.valid:
         # print(credens, credens.valid, credens.expired, credens.token, "line 197")
         if credens and credens.expired and credens.refresh_token:
-            print("expired")
+            # print("expired")
             credens.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
@@ -294,21 +261,22 @@ def upload_res(backup_file, credens, actual_path, backupParent, backup_temp):
             token.write(credens.to_json())
 
     try:
-        print("made it to try block")
+        # print("made it to try block")
         service = build("drive", "v3", credentials=credens)
         with app.app_context():
-            print(user_id)
+            # print(user_id, "user_id line 286")
             user = User.query.get(user_id)
+            # print(user)
             username = user.name
             password = user.password
             folder_name = username + "_" + str(password)
-            print(folder_name, type(folder_name), type(password))
+            # print(folder_name, type(folder_name), type(password))
             response = service.files().list(
                 q=f"name = '{folder_name}' and mimeType='application/vnd.google-apps.folder'",
                 spaces='drive').execute()
 
             if not response['files']:
-                print("block to create backup folder the first time")
+                # print("block to create backup folder the first time")
                 file_metadata = {
                     'name': folder_name,
                     'mimeType': "application/vnd.google-apps.folder"
@@ -321,8 +289,8 @@ def upload_res(backup_file, credens, actual_path, backupParent, backup_temp):
             else:
                 folder_id = response['files'][0]['id']
 
-            create_upload_folder(backup_file, folder_id,
-                                 service, actual_path, backupParent, backup_temp)
+            create_upload_folder(folder_id,
+                                 service, actual_path, backup_temp)
         # for file in os.listdir(backup_file):
         #     file_metadata = {
         #         'name': file,
@@ -335,7 +303,7 @@ def upload_res(backup_file, credens, actual_path, backupParent, backup_temp):
         #     upload_file = service.files().create(
         #         body=file_metadata, media_body=media, fields='id').execute()
 
-        #     print("Backed up: " + file)
+            # print("Backed up: " + file)
     except HttpError as e:
         print("Error: " + str(e))
 
@@ -374,34 +342,35 @@ def copy_to_backup(source, dest, event, backup_folder_temp, backupParent):
                     folders = db.session.query(
                         Folder).filter_by(name=key).first()
                     size = get_folder_size(dest)
-                    print(folder, "273", key)
+                    # print(folder, "269", key)
                     folder_size = to_bytes(folder.folder_size)
-                    print(folder_size, type(folder_size), "total", type(size))
+                    # print(folder_size, type(folder_size), "total", type(size))
                     total_folder_size = size + folder_size
-                    print(total_folder_size, "total")
+                    # print(total_folder_size, "total")
                     total_folder_size = humanize.naturalsize(total_folder_size)
                     folder.folder_size = total_folder_size
 
                     user_id = login_credentials["id"]
                     user = User.query.get(user_id)
                 #    total_data = user.total_data
-                #     print("Total Data")
+                    # print("Total Data")
                 #     total_bytes = to_bytes(total_data)
-                #     print("SIze")
+                    # print("SIze")
                 #     # new_size = to_bytes(size)
                 #     total_bytes = total_bytes + size
                 #     # parsed_data = humanize.pa total_data
-                #     print(total_bytes)
+                    # print(total_bytes)
                 #     user.total_data = humanize.naturalsize(total_bytes)
                     db.session.commit()
-                    print("size of folder", folder.folder_size)
+                    # print(user, "user line 396")
+                    # print("size of folder", folder.folder_size)
 
                     backup_schdule = user.backup_schedule
-                    print(backup_schdule)
+                    # print(backup_schdule)
                     if backup_schdule == "On Arrival":
-                        print(
-                            f"backing {event.src_path} on arrival from {dest}")
-                        upload_res(dest, credens, event.src_path,
+                        # print(
+                        # f"backing {event.src_path} on arrival from {dest}")
+                        upload_res(credens, event.src_path,
                                    backupParent, backup_folder_temp)
 
                     # user = db.session
@@ -428,6 +397,11 @@ def on_created(event):
     backup_path = os.path.expanduser('~')
     backup_path = backup_path + "\Backup"
     backup_path_temp = backup_path
+    dest2 = ""
+    credens2 = ""
+    event_path2 = event.src_path,
+    backupParent2 = ""
+    backup_folder_temp2 = ""
 
     for key in monitored_folders.keys():
         if key in event.src_path:
@@ -455,33 +429,19 @@ def on_created(event):
                 # print(home_dir_temp, new_folder.folder_size,
                 #       new_folder.id, key, "this is the key", new_folder, Folder)
 
-                    print(music)
+                    # print(music)
             msg = copy_to_backup(
                 home_dir_temp, backup_path, event, backup_path_temp, key)
-
-            # with open(file_path, "r") as file:
-            # login_credentials = json.load(file)
-            # print(login_credentials, "login_cred")
-
-            # user = User.query.get(login_credentials["id"])
-            # # user_Total_data = user.total_data
-
-            # # user_Total_data = to_bytes(user_Total_data)
-            # # print(size, user_Total_data)
-            # # user_Total_data = humanize.naturalsize(size+user_Total_data)
-            # # user.total_data = user_Total_data
-
-            # # db.session.commit()
 
 
 if __name__ == '__main__':
     home_dir = os.path.expanduser('~')
-    print(home_dir)
     SCOPES = ["https://www.googleapis.com/auth/drive"]
     credens = None
     user_id = None
     drive_backup_id = None
 
+    print("THis is a loop")
     folder1 = home_dir + "\\" + monitored_folders["Videos"]
     folder2 = home_dir + "\\" + monitored_folders["Documents"]
     # folder3 = home_dir + "\\" + monitored_folders["Downloads"]
@@ -516,8 +476,9 @@ if __name__ == '__main__':
     try:
         while True:
             schedule.run_pending()
-            time.sleep(1)
             backup_scheduler()
+            print("this is a loop")
+            time.sleep(1)
     except KeyboardInterrupt:
         folder1_observer.stop()
         folder2_observer.stop()
@@ -530,4 +491,3 @@ if __name__ == '__main__':
         # folder3_observer.join()
         folder4_observer.join()
         folder5_observer.join()
-print(type(""))

@@ -15,7 +15,7 @@ user2 = {
     "total_data": ''
 }
 
-file_path = "C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json"
+file_path = "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\userData.json"
 
 
 @api_routes.route('/files', methods=['GET'])
@@ -128,14 +128,6 @@ def get_user():
     # "isFirstTime": True,
     return jsonify({'user': [{'name': user.name, "backup_schedule": user.backup_schedule, "backedup_at": user.backedup_at, "restore_path": user.restore_path, "password": user.password, "isFirstTime": user.isFirstTime, "total_data": user.total_data}for user in users]})
 
-#     name = db.Column(db.String(100), nullable=False)
-#     password = db.Column(db.String, nullable=False)
-#     isFirstTime = db.Column(db.Boolean, default=True)
-#     backup_schedule = db.Column(db.String)
-#     backedup_at = db.Column(DateTime, default=None)
-#     total_data = db.Column(db.String)
-#     restore_path = db.Column(db.String)
-
 
 # @api_routes.route('/user', methods=['POST'])
 # def new_user():
@@ -180,7 +172,7 @@ def create_user():
 @api_routes.route('/updateUser', methods=['PUT'])
 def update_user():
     data = request.json
-    with open("C:\\Users\\Donkor James\\Desktop\\Auto_backup2\\Auto_backup\\userData.json", "r") as file:
+    with open("C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\userData.json", "r") as file:
         login_credentials = json.load(file)
 
         user = User.query.get(login_credentials["id"])
@@ -233,16 +225,3 @@ def login():
     else:
         print("naaa")
         return jsonify({"valid": {"isValid": False}})
-
-    # user.name"] = data.get("name", user2["name"])
-    # user2["backup_schedule"] = data.get(
-    #     "backup_schedule", user2["backup_schedule"])
-    # user2["backedup_at"] = data.get("backedup_at", user2["backedup_at"])
-    # user2["restore_path"] = data.get("restore_path", user2["restore_path"])
-    # user2["password"] = data.get("password", user2["password"])
-    # user2["isFirstTime"] = data.get("isFirstTime", user2["isFirstTime"])
-    # user2["total_data"] = data.get("total_data", user2["total_data"])
-    # db.session.commit()
-
-    # print(user2, data.get("backup_schedule"))
-    # return jsonify({'user': {'name': user2["name"], "backup_schedule": user2["backup_schedule"], "backedup_at": user2["backedup_at"], "user": user2["restore_path"], "total_data": user2["total_data"]}})

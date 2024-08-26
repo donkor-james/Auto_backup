@@ -172,7 +172,6 @@ ipcMain.on("postDataForRequest", (event, postData) => {
 });
 
 ipcMain.on("sendData", (event, data) => {
-  console.log("fuck youu");
   // ipcRenderer.send("sendData2", data);
 });
 
