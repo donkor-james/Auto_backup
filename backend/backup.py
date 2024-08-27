@@ -312,9 +312,6 @@ def copy_to_backup(source, dest, event, backup_folder_temp, backupParent):
                                    backupParent, backup_folder_temp)
             break
 
-        # size = get_folder_size()
-        # new_folder = Folder(file, )
-        # return f'source: {temp_source} \ndest: {dest_dir}'
     return f"{last_file} backup in {dest}"
 
 
