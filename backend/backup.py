@@ -43,7 +43,7 @@ file_path = "C:\\Users\\Donkor James\\Auto_backup2\\Auto_backup\\userData.json"
 
 
 def list_files(service, folder_id):
-    query = f"'{folder_id}' in parents"
+    query = f"'{folder_id}' is parents"
     results = service.files().list(q=query).execute()
     items = results.get('files', [])
     return items
@@ -65,6 +65,9 @@ def download_file(service, file_id, file_name):
 
 def restore_data():
     global drive_backup_id
+    print(drive_backup_id)
+
+    home_directory = os.path.expanduser("~")
     flow = InstalledAppFlow.from_client_secrets_file(
         'credentials.json', SCOPES)
     creds = flow.run_local_server(port=0)
@@ -76,9 +79,14 @@ def restore_data():
         files = File.query.all()
     for item in items:
         if item['mimeType'] == 'application/vnd.google-apps.folder':
-            restore_data(item['id'])
+            drive_backup_id = item['id']
+            print(drive_backup_id)
+            restore_data()
         else:
-            return
+            file_id = item["id"]
+            file_name = item["name"]
+            download_file(service, file_id, file_name)
+    return
 
 
 def backup_scheduler():
@@ -164,12 +172,13 @@ def create_upload_folder(folder_id, service, actual_path, backup_temp):
                 upload_file = service.files().create(
                     body=file_metadata, media_body=media, fields='id').execute()
 
-                print(f"\n\n--- Backed up:{file}  To: Google Drive ---\n")
+                print(f"\n\n --- Backed up:{file}  To: Google Drive ---\n")
 
                 file_size = os.path.getsize(backup_temp+'\\'+file)
                 with app.app_context():
+                    print("Actual_path: ", actual_path, "line 171")
                     new_file = File(name=file, file_size=file_size,
-                                    file_path=backup_temp+"\\"+file)
+                                    file_path=actual_path)
                     db.session.add(new_file)
                     user = User.query.get(user_id)
                     total_data = user.total_data
@@ -254,7 +263,6 @@ def upload_res(credens, actual_path, backupParent, backup_temp):
                 file = service.files().create(body=file_metadata, fields='id').execute()
                 folder_id = file.get('id')
                 drive_backup_id = folder_id
-
             else:
                 folder_id = response['files'][0]['id']
 
@@ -311,7 +319,6 @@ def copy_to_backup(source, dest, event, backup_folder_temp, backupParent):
                         upload_res(credens, event.src_path,
                                    backupParent, backup_folder_temp)
             break
-
     return f"{last_file} backup in {dest}"
 
 
